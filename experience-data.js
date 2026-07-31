@@ -2,7 +2,7 @@
   "use strict";
 
   const invariants = {
-    typedAction: "External side effect chỉ chạy qua typed action, policy verdict và approval receipt hợp lệ.",
+    typedAction: "External side effect chỉ chạy qua typed action, policy verdict và approval receipt hợp lệ khi thuộc lớp cần duyệt.",
     noDirect: "Code và Browser microVM không có direct edge, shared filesystem hoặc socket.",
     credential: "Plaintext credential dài hạn không vào sandbox, model context, log, screenshot hoặc snapshot.",
     network: "Sandbox không có route trực tiếp tới control plane, metadata hoặc private network.",
@@ -64,7 +64,7 @@
     { id: "workflow-policy", from: "durable-workflow", to: "policy-engine" },
     { id: "policy-approval", from: "policy-engine", to: "approval-service" },
     { id: "approval-credential", from: "approval-service", to: "credential-broker" },
-    { id: "credential-action", from: "credential-broker", to: "action-executor", label: "request token" },
+    { id: "credential-action", from: "credential-broker", to: "action-executor", label: "scoped token / grant" },
     { id: "action-idempotency", from: "action-executor", to: "idempotency-store", label: "intent / receipt" },
     { id: "idempotency-audit", from: "idempotency-store", to: "audit-log" },
     { id: "workflow-scheduler", from: "durable-workflow", to: "scheduler" },
@@ -556,7 +556,7 @@
   const failures = failureSpecs.map(spec => makeCase(spec, "failure"));
   const abuse = abuseSpecs.map(spec => makeCase(spec, "abuse"));
 
-  const persisted = ["Task plan", "Workflow state", "Policy version", "Approval receipt", "Workspace versions", "File diff", "Artifact manifest", "Idempotency / outbox", "External receipt", "Immutable audit"];
+  const persisted = ["Task plan", "Workflow state", "Policy version", "Approval receipt", "Workspace versions", "File diff", "Artifact manifest", "Idempotency / outbox", "External receipt", "Immutable audit", "Browser profile (opt-in per site)", "Quarantine artifact (temporary 1–7 days; never promoted before clean)"];
   const deleted = ["Process state", "RAM", "/tmp", "Clipboard", "Transient downloads", "Non-persisted browser profile"];
   const revoked = ["Short-lived access token", "Live session capability", "Sandbox controller lease"];
   const never = ["Plaintext secret", "Long-lived credential", "OTP / password", "Hidden model reasoning", "Unscanned quarantine content"];
@@ -571,8 +571,8 @@
     stateCategories: { persisted, deleted, revoked, never },
     modeMeta: {
       happy: {
-        title: "Happy Path", description: "Hành trình an toàn từ prompt đến scanned artifact được upload.",
-        count: 13, scenario: "Kịch bản minh họa", canvasTitle: "CSV → report.md → Project Drive"
+        title: "Happy Path", description: "12 bước an toàn từ prompt đến scanned artifact được upload; mục ALL chạy toàn bộ luồng.",
+        count: 12, scenario: "Kịch bản minh họa", canvasTitle: "CSV → report.md → Project Drive"
       },
       failures: {
         title: "Failure Cases", description: "Detection, containment và recovery cho 12 failure đã tài liệu hóa.",

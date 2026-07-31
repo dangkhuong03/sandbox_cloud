@@ -61,7 +61,7 @@
     selectedId: "full-happy",
     currentCase: null,
     stepIndex: 0,
-    playing: true,
+    playing: false,
     timer: null,
     approvalTimer: null,
     approvalCountdown: 3,
@@ -231,7 +231,7 @@
     state.stepIndex = 0;
     state.completedNodes.clear();
     state.approvalResolved = false;
-    state.playing = true;
+    state.playing = els.autoplay.checked;
     updatePlayControls();
     renderCaseList();
     hideOverlays();
@@ -469,17 +469,24 @@
     els.progressFill.style.width = `${current / total * 100}%`;
   }
 
+  function activateEffectState(effectState) {
+    $$("[data-effect-state]").forEach(item => item.classList.remove("active", "warning", "success"));
+    const target = $(`[data-effect-state="${effectState}"]`);
+    if (target) {
+      target.classList.add("active");
+      if (["unknown", "reconcile"].includes(effectState)) target.classList.add("warning");
+      if (["committed", "resolution"].includes(effectState)) target.classList.add("success");
+    }
+  }
+
   function updateSideEffect(step) {
     const relevant = Boolean(step.effectState || ["execute-upload", "review-commit", "network-timeout", "duplicate-retry"].includes(state.currentCase.id));
     els.sideEffectPanel.hidden = !relevant;
-    $$("[data-effect-state]").forEach(item => item.classList.remove("active", "warning", "success"));
-    if (!relevant) return;
-    const target = $(`[data-effect-state="${step.effectState || "planned"}"]`);
-    if (target) {
-      target.classList.add("active");
-      if (["unknown", "reconcile"].includes(step.effectState)) target.classList.add("warning");
-      if (step.effectState === "committed") target.classList.add("success");
+    if (!relevant) {
+      $$("[data-effect-state]").forEach(item => item.classList.remove("active", "warning", "success"));
+      return;
     }
+    activateEffectState(step.effectState || "planned");
   }
 
   function renderStateItems(targetId, items) {
@@ -529,11 +536,16 @@
     if (result === "approve") {
       state.approvalResolved = true;
       state.completedNodes.add("approval-service");
+      els.sideEffectPanel.hidden = false;
+      activateEffectState("authorized");
+      els.statusApproval.textContent = "Approved";
+      els.statusSideEffect.textContent = "Authorized";
+      els.statusOutcome.textContent = "Authorized · execution pending";
       showToast(els.autoplay.checked ? "Giả lập người dùng phê duyệt · receipt đã ký" : "Người dùng đã phê duyệt exact action", "success");
       if (state.stepIndex < state.currentCase.steps.length - 1) {
         state.playing = true;
         updatePlayControls();
-        window.setTimeout(() => stepForward(false), 450);
+        window.setTimeout(() => stepForward(false), 700);
       } else {
         state.playing = false;
         els.statusOutcome.textContent = "Approved safely";
@@ -582,7 +594,7 @@
     state.stepIndex = 0;
     state.completedNodes.clear();
     state.approvalResolved = false;
-    state.playing = true;
+    state.playing = els.autoplay.checked;
     updatePlayControls();
     hideOverlays();
     applyStep();
@@ -732,6 +744,7 @@
     bindEvents();
     state.currentCase = fullHappyCase();
     renderCaseList();
+    updatePlayControls();
     window.requestAnimationFrame(() => {
       fitCanvas();
       applyStep();

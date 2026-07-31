@@ -59,6 +59,17 @@
     .story-card strong{display:block;font-size:13px}.story-card small{display:block;margin-top:4px;color:var(--muted);font-size:11px}
     .remember{margin:12px 0;padding:12px 14px;border:1px solid #b8cdef;border-radius:10px;background:var(--blue-bg);color:#2b466d}
     .remember strong{color:#174d9f}
+    .architecture-one-line{margin:0 0 14px;padding:12px 14px;border-left:4px solid var(--blue);border-radius:0 9px 9px 0;background:var(--blue-bg);color:#29466e;font-size:15px;font-weight:750}
+    .architecture-rules{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 16px}
+    .architecture-rule{padding:10px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;color:#344257;font-size:12px;font-weight:750}
+    .architecture-rule::before{content:"✓";margin-right:6px;color:var(--green);font-weight:950}
+    .architecture-primary{border-color:#b7c9e3;background:#fff}
+    .arch-details{margin-top:14px;border:1px solid var(--line);border-radius:12px;background:#fafbfd}
+    .arch-details summary{padding:13px 15px;color:#29466e;font-size:14px;font-weight:850;cursor:pointer;list-style-position:inside}
+    .arch-details summary:hover{background:var(--blue-bg)}
+    .arch-details[open] summary{border-bottom:1px solid var(--line);background:var(--blue-bg)}
+    .arch-details-body{padding:14px}
+    .arch-details-intro{margin:0 0 10px;color:var(--muted);font-size:13px}
     .tech-label,.inventory-title{margin:20px 0 10px;padding-top:14px;border-top:1px solid var(--line)}
     .architecture{display:grid;gap:14px}
     .diagram-grid{display:grid;grid-template-columns:1fr;gap:12px;min-width:0}
@@ -82,6 +93,27 @@
     .arch-svg text,.state-svg text{fill:var(--ink);font:700 12px system-ui,-apple-system,"Segoe UI",sans-serif;text-anchor:middle}
     .arch-svg .edge-label,.state-svg .edge-label{fill:var(--muted);stroke:#fbfcfe;stroke-width:4px;stroke-linejoin:round;paint-order:stroke fill;font-size:10px;font-weight:650;pointer-events:none}
     .architecture-inventory{display:grid;gap:10px;padding-top:6px}
+    .trust-map{display:grid;gap:8px;padding-top:4px}
+    .trust-map .zone{margin:0}
+    .trust-control-groups{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+    .trust-group{padding:9px;border:1px dashed #b9a4dd;border-radius:10px;background:rgba(255,255,255,.58)}
+    .trust-group-title{display:block;margin-bottom:7px;color:#5b3a91;font-size:10px;font-weight:900;letter-spacing:.05em;text-transform:uppercase}
+    .trust-group .nodes{grid-template-columns:1fr;gap:6px}
+    .trust-group .node{min-height:48px;padding:7px 8px;font-size:12px}
+    .trust-connector{display:grid;justify-items:center;gap:2px;min-height:34px;color:#526174;font-size:11px;font-weight:800;text-align:center}
+    .trust-connector::before{content:"";width:2px;height:15px;background:#8595a8}
+    .trust-connector::after{content:"▼";margin-top:-5px;color:#8595a8;font-size:11px;line-height:1}
+    .trust-execution{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,.75fr) minmax(0,1fr);gap:10px;align-items:stretch}
+    .trust-execution .zone{height:100%}
+    .trust-execution .nodes{grid-template-columns:1fr}
+    .mediation-bridge{display:grid;place-content:center;padding:12px;border:1px dashed var(--blue);border-radius:12px;background:var(--blue-bg);color:#245187;text-align:center}
+    .mediation-bridge strong{font-size:12px}
+    .mediation-bridge span{margin-top:5px;font-size:10px}
+    .mediation-bridge .blocked-link{color:var(--red);font-weight:850}
+    .trust-bottom{display:grid;grid-template-columns:.8fr 1.2fr;gap:10px}
+    .trust-bottom .nodes{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .trust-bottom .external-zone .node:last-child{grid-column:1/-1}
+    .trust-map-note{padding:9px 11px;border-radius:9px;background:var(--green-bg);color:#216344;font-size:11px;font-weight:750;text-align:center}
     .zone{position:relative;padding:34px 12px 12px;border:2px solid var(--zone);border-radius:14px;background:var(--zone-bg)}
     .zone-title{position:absolute;top:10px;left:14px;color:var(--zone-text);font-size:12px;font-weight:850;letter-spacing:.06em;text-transform:uppercase}
     .nodes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
@@ -205,7 +237,7 @@
     @media(max-width:900px){
       .topbar .wrap{width:100%;padding:0 14px}.toc{display:none}
       section,.hero{padding:24px}.principles,.four-grid,.assignment-map{grid-template-columns:repeat(2,1fr)}
-      .plain-story{grid-template-columns:repeat(3,1fr)}.story-card:nth-child(3)::after{display:none}
+      .plain-story{grid-template-columns:repeat(3,1fr)}.story-card:nth-child(3)::after{display:none}.architecture-rules{grid-template-columns:repeat(2,1fr)}.trust-control-groups{grid-template-columns:repeat(2,1fr)}
       .nodes{grid-template-columns:repeat(2,1fr)}.step-meta{grid-template-columns:repeat(2,1fr)}
     }
     @media(max-width:640px){
@@ -213,7 +245,7 @@
       .topbar .wrap{gap:8px}.brand{font-size:13px}.print{padding:8px 9px;font-size:0}.print::after{content:"PDF";font-size:11px}
       h1{font-size:clamp(36px,12vw,48px);overflow-wrap:anywhere}
       section,.hero{margin:10px auto;padding:18px;border-radius:14px}
-      .summary,.principles,.four-grid,.three-grid,.ux-grid,.case-grid,.boundary-grid,.policy-grid,.sources,.data-row,.invariant-grid,.assignment-map,.plain-story{grid-template-columns:1fr}
+      .summary,.principles,.four-grid,.three-grid,.ux-grid,.case-grid,.boundary-grid,.policy-grid,.sources,.data-row,.invariant-grid,.assignment-map,.plain-story,.architecture-rules,.trust-control-groups,.trust-execution,.trust-bottom{grid-template-columns:1fr}
       .story-card::after{display:none}
       .approval{grid-column:auto}.nodes{grid-template-columns:1fr}.step{grid-template-columns:40px 1fr}.step-no{width:36px;height:36px}
       .step-meta{grid-template-columns:1fr}.case dl{grid-template-columns:1fr}.buttons{justify-content:stretch}.btn{width:100%}
@@ -293,7 +325,8 @@
     </section>
 
     <section id="architecture">
-      <div class="section-head"><span class="eyebrow">02 · Static Architecture</span><h2>Hệ thống hoạt động như thế nào?</h2><p>Trước tiên hãy đọc luồng sáu bước. Ba sơ đồ phía sau giải thích chi tiết cùng một luồng; danh mục 24 thành phần nằm cuối phần để tra cứu.</p></div>
+      <div class="section-head"><span class="eyebrow">02 · Static Architecture</span><h2>Hệ thống hoạt động như thế nào?</h2></div>
+      <p class="architecture-one-line">Trọng tâm: agent chỉ làm việc trong sandbox; mọi file và hành động đi ra ngoài đều phải qua Control Plane, kiểm tra an toàn và quyết định của user.</p>
       <div class="plain-story">
         <div class="story-card"><b>1</b><strong>User giao việc</strong><small>Chọn file, mục tiêu và phạm vi.</small></div>
         <div class="story-card"><b>2</b><strong>Hệ thống lập kế hoạch</strong><small>Control Plane kiểm tra policy và risk.</small></div>
@@ -302,17 +335,19 @@
         <div class="story-card"><b>5</b><strong>User xem và duyệt</strong><small>Đích, file, hậu quả và scope đều rõ.</small></div>
         <div class="story-card"><b>6</b><strong>Hành động được thực hiện</strong><small>Executor upload và lưu receipt/audit.</small></div>
       </div>
-      <div class="remember"><strong>Chỉ cần nhớ:</strong> agent không trực tiếp cầm credential, Code không nối thẳng với Browser, file chưa scan không được upload, và user quyết định trước hành động có hậu quả.</div>
-      <div class="legend"><span><i class="blue"></i>System flow</span><span><i class="cyan"></i>Deterministic infrastructure</span><span><i class="violet"></i>Security control</span><span><i class="amber"></i>Approval/quarantine</span><span><i class="red"></i>Blocked</span><span><i class="green"></i>Verified</span><span><i class="gray"></i>External context</span></div>
+      <div class="architecture-rules" aria-label="Bốn quy tắc kiến trúc chính">
+        <div class="architecture-rule">Credential luôn ở ngoài sandbox</div>
+        <div class="architecture-rule">Code và Browser không nối trực tiếp</div>
+        <div class="architecture-rule">File phải scan trước khi upload</div>
+        <div class="architecture-rule">User duyệt trước hành động có hậu quả</div>
+      </div>
       <div class="architecture">
-        <h3 class="tech-label">Chi tiết kỹ thuật — đọc từng sơ đồ độc lập</h3>
-        <div class="diagram-grid">
-          <article class="diagram-card">
-            <h3>a) Một yêu cầu đi từ user đến kết quả như thế nào?</h3>
+          <article class="diagram-card architecture-primary">
+            <h3>Sơ đồ chính · Từ yêu cầu đến kết quả</h3>
             <p class="muted">Hai microVM làm việc riêng. File đi vào khu scan; kết quả scan quay về Control Plane trước khi export được phép.</p>
             <svg class="arch-svg overview-svg" viewBox="0 0 1000 360" role="img" aria-labelledby="overview-title overview-desc">
               <title id="overview-title">Sơ đồ tổng quan Cloud Agent Sandbox</title>
-              <desc id="overview-desc">User gọi Control Plane. Control Plane cấp Code và Browser microVM riêng. Hai microVM chỉ chuyển artifact vào Quarantine. Scan result quay lại Control Plane trước khi approved export.</desc>
+              <desc id="overview-desc">User gọi Control Plane. Control Plane cấp Code và Browser microVM riêng. Artifact đi vào Quarantine; Browser gửi typed extraction hoặc download reference qua Control Plane mediation. Scan result quay lại Control Plane trước khi approved export.</desc>
               <defs><marker id="arrow-overview" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#8595a8"/></marker></defs>
               <g>
                 <path class="edge" d="M155 170H210"/><path class="edge" d="M390 145C420 145 420 90 450 90"/><path class="edge" d="M390 175C420 175 420 255 450 255"/>
@@ -330,8 +365,14 @@
               <text class="edge-label" x="527" y="160">NO DIRECT EDGE / SOCKET / SHARED FS</text>
             </svg>
           </article>
+        <details class="arch-details">
+          <summary>Xem chi tiết kỹ thuật · Control Plane, credential và danh mục 24 thành phần</summary>
+          <div class="arch-details-body">
+            <p class="arch-details-intro">Phần này dành cho người cần kiểm tra implementation boundary và trách nhiệm của từng component.</p>
+            <div class="legend"><span><i class="blue"></i>System flow</span><span><i class="cyan"></i>Deterministic infrastructure</span><span><i class="violet"></i>Security control</span><span><i class="amber"></i>Approval/quarantine</span><span><i class="red"></i>Blocked</span><span><i class="green"></i>Verified</span><span><i class="gray"></i>External context</span></div>
+            <div class="diagram-grid">
           <article class="diagram-card">
-            <h3>b) Ai kiểm tra và cấp quyền cho hành động?</h3>
+            <h3>Ai kiểm tra và cấp quyền cho hành động?</h3>
             <p class="muted">Policy đánh giá risk, Approval ghi nhận quyết định, Broker cấp quyền ngắn hạn, Executor hành động và Outbox lưu dấu vết.</p>
             <svg class="arch-svg control-svg" viewBox="0 0 1000 260" role="img" aria-labelledby="control-title control-desc">
               <title id="control-title">Quan hệ gọi trong Trusted Control Plane</title>
@@ -351,7 +392,7 @@
             </svg>
           </article>
           <article class="diagram-card">
-            <h3>c) Credential đi đâu — và không đi đâu?</h3>
+            <h3>Credential đi đâu — và không đi đâu?</h3>
             <p class="muted">Secret thật ở Vault/KMS. Sandbox chỉ dùng opaque handle; token ngắn hạn chỉ được gắn vào exact request của Action Executor.</p>
             <svg class="arch-svg credential-svg" viewBox="0 0 1000 270" role="img" aria-labelledby="credential-title credential-desc">
               <title id="credential-title">Luồng credential ngắn hạn</title>
@@ -371,37 +412,102 @@
             </svg>
           </article>
         </div>
-        <h3 class="inventory-title">Danh mục 24 thành phần — dùng để tra cứu</h3>
-        <div class="architecture-inventory">
-        <div class="zone user-zone"><span class="zone-title">1 · User &amp; Human-in-the-loop</span><div class="nodes"><div class="node blue" data-arch-node>User / Human-in-the-loop UI<small>Goal · Preview · Approval · Review</small></div></div></div>
-        <div class="flow-note">User request → API/Auth → Task Planner → Durable Workflow → Policy Engine</div>
-        <div class="zone control-zone">
-          <span class="zone-title">2 · Trusted Control Plane</span>
-          <div class="nodes">
-            <div class="node violet" data-arch-node>API / Authentication</div><div class="node violet" data-arch-node>Task Planner</div>
-            <div class="node violet" data-arch-node>Durable Workflow</div><div class="node violet" data-arch-node>Policy Engine</div>
-            <div class="node amber" data-arch-node>Approval Service</div><div class="node violet" data-arch-node>Event / Audit Log</div>
-            <div class="node violet" data-arch-node>Scheduler / Attestation</div><div class="node violet" data-arch-node>Credential Broker<small>Giữ và cấp token ngắn hạn</small></div>
-            <div class="node violet" data-arch-node>Action Executor<small>Typed external side effect</small></div><div class="node cyan" data-arch-node>Idempotency Store / Transactional Outbox</div>
-            <div class="node cyan" data-arch-node>Workspace Version Service</div><div class="node violet" data-arch-node>Egress / DNS / SSRF / DLP Gateway</div>
-            <div class="node amber" data-arch-node>Artifact Policy / Quarantine Controller<small>Chỉ nhận result + manifest</small></div>
+        <h3 class="inventory-title">Trust Boundary Map · 24 thành phần</h3>
+        <p class="arch-details-intro">Đọc từ trên xuống dưới. Mỗi khung màu là một ranh giới tin cậy; các node bên trong dùng chung mức độ bảo vệ và quyền truy cập.</p>
+        <div class="architecture-inventory trust-map">
+          <div class="zone user-zone">
+            <span class="zone-title">1 · User &amp; Human-in-the-loop</span>
+            <div class="nodes"><div class="node blue" data-arch-node>User / Human-in-the-loop UI<small>Goal · Preview · Approval · Review</small></div></div>
           </div>
-          <div class="credential-zone">8 · Credential Boundary — raw credential không vào model, microVM, log, screenshot hoặc snapshot</div>
+
+          <div class="trust-connector">Authenticated request · exact user intent</div>
+
+          <div class="zone control-zone">
+            <span class="zone-title">2 · Trusted Control Plane</span>
+            <div class="trust-control-groups">
+              <div class="trust-group">
+                <span class="trust-group-title">Điều phối</span>
+                <div class="nodes">
+                  <div class="node violet" data-arch-node>API / Authentication</div>
+                  <div class="node violet" data-arch-node>Task Planner</div>
+                  <div class="node violet" data-arch-node>Durable Workflow</div>
+                  <div class="node violet" data-arch-node>Scheduler / Attestation</div>
+                </div>
+              </div>
+              <div class="trust-group">
+                <span class="trust-group-title">Policy &amp; quan sát</span>
+                <div class="nodes">
+                  <div class="node violet" data-arch-node>Policy Engine</div>
+                  <div class="node amber" data-arch-node>Approval Service</div>
+                  <div class="node violet" data-arch-node>Event / Audit Log</div>
+                  <div class="node violet" data-arch-node>Egress / DNS / SSRF / DLP Gateway</div>
+                </div>
+              </div>
+              <div class="trust-group">
+                <span class="trust-group-title">Quyền &amp; hành động</span>
+                <div class="nodes">
+                  <div class="node violet" data-arch-node>Credential Broker<small>Giữ và cấp token ngắn hạn</small></div>
+                  <div class="node violet" data-arch-node>Action Executor<small>Typed external side effect</small></div>
+                  <div class="node amber" data-arch-node>Artifact Policy / Quarantine Controller<small>Chỉ nhận result + manifest</small></div>
+                </div>
+              </div>
+              <div class="trust-group">
+                <span class="trust-group-title">State &amp; nhất quán</span>
+                <div class="nodes">
+                  <div class="node cyan" data-arch-node>Idempotency Store / Transactional Outbox</div>
+                  <div class="node cyan" data-arch-node>Workspace Version Service</div>
+                </div>
+              </div>
+            </div>
+            <div class="credential-zone">Credential boundary · raw credential không vào model, microVM, log, screenshot hoặc snapshot</div>
+          </div>
+
+          <div class="trust-connector">Attested short-lived capabilities · guest kernel và network identity riêng</div>
+
+          <div class="trust-execution">
+            <div class="zone code-zone">
+              <span class="zone-title">3 · Untrusted Code Boundary</span>
+              <div class="nodes"><div class="node cyan" data-arch-node>Code Firecracker microVM<small>Terminal · packages · CoW /work</small></div></div>
+            </div>
+            <div class="mediation-bridge" id="typed-mediation">
+              <strong>Typed Control Plane mediation</strong>
+              <span>Browser → extraction/download reference → Control Plane → structured data hoặc scanned reference → Code</span>
+              <span class="blocked-link">Không có direct edge, shared filesystem hoặc socket</span>
+            </div>
+            <div class="zone browser-zone">
+              <span class="zone-title">4 · Untrusted Browser Boundary</span>
+              <div class="nodes"><div class="node cyan" data-arch-node>Browser Firecracker microVM<small>Chromium · fresh profile · download ref</small></div></div>
+            </div>
+          </div>
+
+          <div class="trust-connector">Artifact / download reference → quarantine staging</div>
+
+          <div class="zone quarantine-zone" id="quarantine-boundary">
+            <span class="zone-title">5 · Separate Quarantine Boundary</span>
+            <div class="nodes"><div class="node amber" data-arch-node>Artifact Scanner / Detonation Cell<small>MIME · archive · AV/YARA · detonation</small></div></div>
+          </div>
+
+          <div class="trust-map-note">Scan result + manifest → Artifact Policy Controller → Approval → Action Executor → approved typed export</div>
+
+          <div class="trust-bottom">
+            <div class="zone persist-zone">
+              <span class="zone-title">6 · Persistent Storage</span>
+              <div class="nodes"><div class="node cyan" data-arch-node>Persistent State Store</div><div class="node cyan" data-arch-node>Clean Base Images</div></div>
+            </div>
+            <div class="zone external-zone">
+              <span class="zone-title">7 · External Internet &amp; APIs</span>
+              <div class="nodes">
+                <div class="node gray" data-arch-node>Selected User Files</div>
+                <div class="node green" data-arch-node>Package Registry / Verified Mirror</div>
+                <div class="node gray" data-arch-node>Public Internet</div>
+                <div class="node gray" data-arch-node>External APIs / User Accounts</div>
+                <div class="node green" data-arch-node>Approved Export Destination</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="flow-note">Scheduler / Attestation → hai capability ngắn hạn → hai guest kernel và network identity riêng</div>
-        <div class="data-row">
-          <div class="zone code-zone"><span class="zone-title">3 · Untrusted Code Boundary</span><div class="nodes"><div class="node cyan" data-arch-node>Code Firecracker microVM<small>Terminal · packages · CoW /work</small></div></div></div>
-          <div class="zone browser-zone"><span class="zone-title">4 · Untrusted Browser Boundary</span><div class="nodes"><div class="node cyan" data-arch-node>Browser Firecracker microVM<small>Chromium · fresh profile · download ref</small></div></div></div>
-        </div>
-        <div class="flow-note" id="typed-mediation">Browser microVM → typed extraction result / download reference → Control Plane mediation → structured data hoặc scanned reference → Code microVM</div>
-        <div class="flow-note warn">Không có Browser → Code direct edge, shared filesystem hoặc socket</div>
-        <div class="zone quarantine-zone" id="quarantine-boundary"><span class="zone-title">5 · Separate Quarantine Boundary</span><div class="nodes"><div class="node amber" data-arch-node>Artifact Scanner / Detonation Cell<small>MIME · archive · AV/YARA · detonation</small></div></div></div>
-        <div class="flow-note ok">Code/download ref → quarantine staging → Scanner Cell → scan result + manifest → Artifact Policy Controller → approval → Action Executor → approved export</div>
-        <div class="data-row">
-          <div class="zone persist-zone"><span class="zone-title">6 · Persistent Storage</span><div class="nodes"><div class="node cyan" data-arch-node>Persistent State Store</div><div class="node cyan" data-arch-node>Clean Base Images</div></div></div>
-          <div class="zone external-zone"><span class="zone-title">7 · External Internet &amp; APIs</span><div class="nodes"><div class="node gray" data-arch-node>Selected User Files</div><div class="node green" data-arch-node>Package Registry / Verified Mirror</div><div class="node gray" data-arch-node>Public Internet</div><div class="node gray" data-arch-node>External APIs / User Accounts</div><div class="node green" data-arch-node>Approved Export Destination</div></div></div>
-        </div>
-        </div>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -663,7 +769,7 @@
         return clone.textContent.trim();
       };
 
-      const createMatrix = ({source, caption, headers, rows}) => {
+      const createMatrix = ({source, caption, headers, rows, hintText}) => {
         if (!source || !rows.length) return;
 
         const wrap = document.createElement("div");
@@ -732,7 +838,7 @@
 
         const hint = document.createElement("p");
         hint.className = "matrix-hint";
-        hint.textContent = "Đọc matrix: mỗi hàng là một bước/case, mỗi cột là một tiêu chí. Di chuột hoặc dùng phím Tab vào một hàng để mở thẻ thông tin đầy đủ như giao diện card trước đây; cuộn ngang để so sánh thêm cột.";
+        hint.textContent = hintText || "Đọc matrix: mỗi hàng là một bước/case, mỗi cột là một tiêu chí. Di chuột hoặc dùng phím Tab vào một hàng để mở thẻ thông tin đầy đủ như giao diện card trước đây; cuộn ngang để so sánh thêm cột.";
         source.before(hint, wrap);
         source.remove();
       };
@@ -761,6 +867,16 @@
           values: fields.map((field) => values[field] || ""),
           featured: item.classList.contains("emphasis")
         };
+      });
+
+      const boundarySource = document.querySelector("#boundaries .boundary-grid");
+      const boundaryFields = ["Inside", "Allowed", "Never"];
+      createMatrix({
+        source: boundarySource,
+        caption: "Trust Boundaries matrix",
+        headers: ["Trust boundary", ...boundaryFields],
+        rows: caseRows("#boundaries .boundary", boundaryFields),
+        hintText: "Đọc matrix: mỗi hàng là một trust boundary. Inside cho biết thành phần nằm trong vùng, Allowed là dữ liệu được phép đi qua, Never là điều tuyệt đối bị cấm. Di chuột hoặc dùng phím Tab vào một hàng để mở thẻ thông tin đầy đủ."
       });
 
       const failureSource = document.querySelector("#failures .case-grid");
