@@ -9,7 +9,7 @@
     :root{--ink:#172033;--muted:#5c687a;--line:#dce3eb;--paper:#fff;--bg:#f4f7fa;--blue:#2867d8;--blue-bg:#edf4ff;--cyan:#087f94;--cyan-bg:#eafafd;--violet:#7047b8;--violet-bg:#f4effd;--amber:#a86408;--amber-bg:#fff7e7;--red:#b63b35;--red-bg:#fff0ef;--green:#197449;--green-bg:#ebf8f1;--gray:#637184;--gray-bg:#f1f4f7;--radius:14px;--shadow:0 12px 35px rgba(30,47,67,.08)}
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
-    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.58 system-ui,-apple-system,"Segoe UI",sans-serif}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.58 system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
     a{color:var(--blue)}
     button{font:inherit}
     .wrap{width:min(1180px,calc(100% - 40px));margin:auto}
@@ -19,65 +19,111 @@
     .toc{display:flex;gap:4px;overflow:auto;white-space:nowrap;scrollbar-width:none}
     .toc a{padding:7px 9px;border-radius:7px;color:var(--muted);font-size:12px;text-decoration:none}
     .toc a:hover{background:var(--blue-bg);color:var(--blue)}
+    .flow-view{flex:none;padding:8px 12px;border:1px solid var(--blue);border-radius:8px;background:var(--blue);color:#fff;font-size:12px;font-weight:800;text-decoration:none;white-space:nowrap}
+    .flow-view:hover{background:#1f56b8}
+    .flow-view:focus-visible{outline:3px solid rgba(40,103,216,.25);outline-offset:2px}
     .print{flex:none;padding:8px 12px;border:1px solid var(--blue);border-radius:8px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer}
     main{padding-bottom:70px}
-    section{scroll-margin-top:76px;margin:24px auto;padding:44px;border:1px solid var(--line);border-radius:20px;background:var(--paper);box-shadow:var(--shadow)}
-    .hero{margin-top:28px;padding:60px;background:linear-gradient(135deg,#fff 45%,#edf5ff)}
+    section{scroll-margin-top:76px;margin:16px auto;padding:30px;border:1px solid var(--line);border-radius:16px;background:var(--paper);box-shadow:var(--shadow)}
+    .hero{margin-top:20px;padding:40px;background:linear-gradient(135deg,#fff 45%,#edf5ff)}
     .eyebrow,.pill{display:inline-block;color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     h1{max-width:850px;margin:14px 0 12px;font-size:clamp(40px,7vw,72px);line-height:1;letter-spacing:-.055em}
     .lead{max-width:800px;margin:0;color:#36445a;font-size:clamp(18px,2vw,24px)}
+    .audience-note{max-width:850px;margin:22px 0 0;padding:14px 16px;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;background:#f6f9ff;color:#34445b}
+    .assignment-map{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
+    .assignment-card{padding:14px;border:1px solid var(--line);border-radius:11px;background:#fff}
+    .assignment-card span{display:grid;place-items:center;width:30px;height:30px;margin-bottom:10px;border-radius:50%;background:var(--blue);color:#fff;font-weight:900}
+    .assignment-card h3{font-size:16px}.assignment-card p{margin:0;color:var(--muted);font-size:14px}
+    .glossary{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+    .glossary span{padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#455268;font-size:12px}
     h2{margin:0 0 8px;font-size:clamp(27px,4vw,38px);line-height:1.15;letter-spacing:-.03em}
     h3{margin:0 0 8px;font-size:18px;line-height:1.3}
     h4{margin:0 0 6px;font-size:15px}
     .section-head{max-width:820px;margin-bottom:28px}
     .section-head p,.muted{color:var(--muted)}
-    .summary,.principles,.four-grid,.three-grid,.ux-grid,.case-grid,.invariant-grid,.boundary-grid{display:grid;gap:16px}
-    .summary{grid-template-columns:repeat(2,1fr);margin:32px 0}
+    .summary,.principles,.four-grid,.three-grid,.ux-grid,.case-grid,.invariant-grid,.boundary-grid{display:grid;gap:12px}
+    .summary{grid-template-columns:repeat(2,1fr);margin:22px 0}
     .summary li{margin:8px 0}
     .principles,.four-grid{grid-template-columns:repeat(4,1fr)}
     .principle,.info-card,.state-card,.ux-card,.case,.invariant,.boundary{border:1px solid var(--line);border-radius:var(--radius);background:#fff}
-    .principle,.info-card,.state-card,.ux-card,.case,.invariant{padding:19px}
+    .principle,.info-card,.state-card,.ux-card,.case,.invariant{padding:14px}
     .principle{border-top:4px solid var(--blue)}
     .principle:nth-child(2){border-top-color:var(--violet)} .principle:nth-child(3){border-top-color:var(--cyan)} .principle:nth-child(4){border-top-color:var(--amber)}
-    .legend{display:flex;flex-wrap:wrap;gap:14px;margin:18px 0 24px;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fafbfd;font-size:13px}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 18px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:#fafbfd;font-size:13px}
     .legend i{display:inline-block;width:10px;height:10px;margin-right:6px;border-radius:50%;background:var(--c)}
     .legend .blue{--c:var(--blue)}.legend .cyan{--c:var(--cyan)}.legend .violet{--c:var(--violet)}.legend .amber{--c:var(--amber)}.legend .red{--c:var(--red)}.legend .green{--c:var(--green)}.legend .gray{--c:var(--gray)}
+    .plain-story{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin:16px 0}
+    .story-card{position:relative;padding:12px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;text-align:center}
+    .story-card:not(:last-child)::after{content:"→";position:absolute;z-index:2;right:-10px;top:50%;transform:translateY(-50%);color:var(--blue);font-weight:900}
+    .story-card b{display:grid;place-items:center;width:28px;height:28px;margin:0 auto 8px;border-radius:50%;background:var(--blue-bg);color:var(--blue)}
+    .story-card strong{display:block;font-size:13px}.story-card small{display:block;margin-top:4px;color:var(--muted);font-size:11px}
+    .remember{margin:12px 0;padding:12px 14px;border:1px solid #b8cdef;border-radius:10px;background:var(--blue-bg);color:#2b466d}
+    .remember strong{color:#174d9f}
+    .tech-label,.inventory-title{margin:20px 0 10px;padding-top:14px;border-top:1px solid var(--line)}
     .architecture{display:grid;gap:14px}
-    .zone{position:relative;padding:40px 16px 16px;border:2px solid var(--zone);border-radius:16px;background:var(--zone-bg)}
+    .diagram-grid{display:grid;grid-template-columns:1fr;gap:12px;min-width:0}
+    .diagram-card{max-width:100%;min-width:0;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fbfcfe;overflow-x:auto;break-inside:avoid}
+    .diagram-card h3{margin-bottom:12px}
+    .arch-svg,.state-svg{display:block;width:100%;height:auto;overflow:visible}
+    .arch-svg .edge,.state-svg .edge{fill:none;stroke:#8595a8;stroke-width:2}
+    .overview-svg .edge{marker-end:url(#arrow-overview)}
+    .control-svg .edge{marker-end:url(#arrow-control)}
+    .credential-svg .edge{marker-end:url(#arrow-credential)}
+    .state-svg .edge{marker-end:url(#arrow-state)}
+    .arch-svg .edge.dashed{stroke-dasharray:6 5}
+    .arch-svg .edge.blocked{stroke:var(--red)}
+    .arch-svg .svg-box,.state-svg .svg-box{stroke-width:2;rx:10}
+    .arch-svg .system{fill:var(--blue-bg);stroke:var(--blue)}
+    .arch-svg .infra{fill:var(--cyan-bg);stroke:var(--cyan)}
+    .arch-svg .security{fill:var(--violet-bg);stroke:var(--violet)}
+    .arch-svg .approval-node{fill:var(--amber-bg);stroke:var(--amber)}
+    .arch-svg .external{fill:var(--gray-bg);stroke:var(--gray)}
+    .arch-svg .verified{fill:var(--green-bg);stroke:var(--green)}
+    .arch-svg text,.state-svg text{fill:var(--ink);font:700 12px system-ui,-apple-system,"Segoe UI",sans-serif;text-anchor:middle}
+    .arch-svg .edge-label,.state-svg .edge-label{fill:var(--muted);stroke:#fbfcfe;stroke-width:4px;stroke-linejoin:round;paint-order:stroke fill;font-size:10px;font-weight:650;pointer-events:none}
+    .architecture-inventory{display:grid;gap:10px;padding-top:6px}
+    .zone{position:relative;padding:34px 12px 12px;border:2px solid var(--zone);border-radius:14px;background:var(--zone-bg)}
     .zone-title{position:absolute;top:10px;left:14px;color:var(--zone-text);font-size:12px;font-weight:850;letter-spacing:.06em;text-transform:uppercase}
-    .nodes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-    .node{display:grid;align-content:center;min-height:70px;padding:11px;border:1px solid #cbd6e3;border-radius:10px;background:#fff;box-shadow:0 3px 10px rgba(27,45,68,.06);font-size:13px;font-weight:800;text-align:center}
+    .nodes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+    .node{display:grid;align-content:center;min-height:64px;padding:9px;border:1px solid #cbd6e3;border-radius:9px;background:#fff;box-shadow:0 3px 10px rgba(27,45,68,.06);font-size:13px;font-weight:800;text-align:center}
+    .node.blue{border-color:#91b4ef;background:var(--blue-bg);color:#194eaa}
+    .node.cyan{border-color:#75c6d3;background:var(--cyan-bg);color:#096f80}
+    .node.violet{border-color:#ae91dd;background:var(--violet-bg);color:#59359b}
+    .node.amber{border-color:#e1b05e;background:var(--amber-bg);color:#8e5709}
+    .node.green{border-color:#78bf9b;background:var(--green-bg);color:#12643d}
+    .node.gray{border-color:#aeb9c6;background:var(--gray-bg);color:#526174}
     .node small{display:block;margin-top:3px;color:var(--muted);font-size:11px;font-weight:500}
     .user-zone{--zone:#86aef1;--zone-bg:var(--blue-bg);--zone-text:var(--blue)}
     .control-zone{--zone:#ad90dd;--zone-bg:var(--violet-bg);--zone-text:var(--violet)}
-    .data-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .data-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .code-zone,.browser-zone{--zone:#70c6d3;--zone-bg:var(--cyan-bg);--zone-text:var(--cyan)}
     .quarantine-zone{--zone:#e4ae53;--zone-bg:var(--amber-bg);--zone-text:var(--amber)}
     .persist-zone{--zone:#98a7b8;--zone-bg:var(--gray-bg);--zone-text:var(--gray)}
     .external-zone{--zone:#b2bcc8;--zone-bg:#f8f9fb;--zone-text:var(--gray)}
-    .credential-zone{margin-top:10px;padding:10px;border:2px dashed var(--violet);border-radius:10px;background:#fff;color:var(--violet);font-size:12px;text-align:center}
-    .flow-note{padding:12px;border-radius:10px;background:#e8f5ff;color:#195f91;font-size:13px;font-weight:750;text-align:center}
+    .credential-zone{margin-top:8px;padding:8px;border:2px dashed var(--violet);border-radius:9px;background:#fff;color:var(--violet);font-size:12px;text-align:center}
+    .flow-note{padding:9px;border-radius:9px;background:#e8f5ff;color:#195f91;font-size:13px;font-weight:750;text-align:center}
     .flow-note.warn{background:var(--amber-bg);color:var(--amber)}
     .flow-note.ok{background:var(--green-bg);color:var(--green)}
     .flow-note.spaced{margin-top:18px}
     .boundary-grid{grid-template-columns:repeat(2,1fr)}
     .boundary{overflow:hidden}
-    .boundary h3{padding:14px 16px;background:var(--gray-bg)}
+    .boundary h3{padding:11px 13px;background:var(--gray-bg)}
     .boundary dl,.case dl{margin:0}
-    .boundary dl{padding:12px 16px}
+    .boundary dl{padding:10px 13px}
     dt{margin-top:8px;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
     dd{margin:2px 0 0}
     .info-card ul,.state-card ul{margin:10px 0 0;padding-left:19px}
     .info-card li,.state-card li{margin:6px 0}
     .three-grid{grid-template-columns:repeat(3,1fr)}
     .state-card.persist{border-top:4px solid var(--green)} .state-card.delete{border-top:4px solid var(--red)} .state-card.revoke{border-top:4px solid var(--violet)}
-    .state-machine{margin-top:20px;padding:20px;border:1px solid var(--line);border-radius:14px;background:#fafbfd}
-    .state-line{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:9px 0}
-    .state-line span{padding:7px 10px;border-radius:8px;background:var(--blue-bg);color:var(--blue);font-weight:800}
-    .state-line.ambiguous span{background:var(--amber-bg);color:var(--amber)}
+    .state-machine{margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fafbfd}
+    .state-svg .normal-state{fill:var(--blue-bg);stroke:var(--blue)}
+    .state-svg .unknown-state{fill:var(--amber-bg);stroke:var(--amber)}
+    .state-svg .success-state{fill:var(--green-bg);stroke:var(--green)}
+    .state-svg .manual-state{fill:var(--red-bg);stroke:var(--red)}
     .ux-grid{grid-template-columns:repeat(2,1fr)}
     .ux-card{background:#fbfcfe}
-    .wire{margin-top:12px;padding:14px;border:1px solid #cfd8e3;border-radius:10px;background:#fff}
+    .wire{margin-top:10px;padding:11px;border:1px solid #cfd8e3;border-radius:10px;background:#fff}
     .wire-row{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px solid #edf0f3}
     .wire-row:last-child{border:0}
     .approval{grid-column:span 2;border:2px solid #dfad58;background:var(--amber-bg)}
@@ -87,49 +133,64 @@
     .btn{padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;font-weight:750}
     .btn.primary{border-color:var(--blue);background:var(--blue);color:#fff}
     .btn.danger{color:var(--red)}
-    .policy-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
-    .policy-box{padding:18px;border-radius:12px;background:var(--green-bg)} .policy-box.approve{background:var(--amber-bg)}
-    .timeline{position:relative;display:grid;gap:14px;margin-top:24px}
-    .step{display:grid;grid-template-columns:52px 1fr;gap:15px}
+    .policy-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+    .policy-box{padding:14px;border-radius:11px;background:var(--green-bg)} .policy-box.approve{background:var(--amber-bg)}
+    .timeline{position:relative;display:grid;gap:10px;margin-top:18px}
+    .step{display:grid;grid-template-columns:52px 1fr;gap:11px}
     .step-no{display:grid;place-items:center;align-self:start;width:45px;height:45px;border-radius:50%;background:var(--blue);color:#fff;font-weight:900}
-    .step-body{padding:18px;border:1px solid var(--line);border-radius:13px;background:#fff}
+    .step-body{padding:14px;border:1px solid var(--line);border-radius:11px;background:#fff}
     .step-body h3{color:var(--blue)}
-    .step-meta{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px}
-    .step-meta div{padding:9px;border-radius:8px;background:#f6f8fa;font-size:12px}
+    .step-meta{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:9px}
+    .step-meta div{padding:7px;border-radius:7px;background:#f6f8fa;font-size:12px}
     .step-meta b{display:block;color:var(--muted);font-size:10px;text-transform:uppercase}
     .case-grid{grid-template-columns:repeat(2,1fr)}
     .case{position:relative}
     .case h3{padding-right:70px}
-    .tag{position:absolute;top:17px;right:17px;padding:4px 7px;border-radius:6px;background:var(--gray-bg);color:var(--gray);font-size:10px;font-weight:850;text-transform:uppercase}
+    .tag{position:absolute;top:13px;right:13px;padding:4px 7px;border-radius:6px;background:var(--gray-bg);color:var(--gray);font-size:10px;font-weight:850;text-transform:uppercase}
     .case dl{display:grid;grid-template-columns:repeat(2,1fr);gap:0 14px}
-    .case dd{font-size:13px}
+    .case dt,.case dd{margin:0;padding:6px 0;border-bottom:1px solid #edf0f3}
+    .case dt{color:#5e6c80}.case dd{font-size:13px}
+    .case dt:last-of-type,.case dd:last-child{border-bottom:0}
     .case.emphasis{border:2px solid var(--amber);background:#fffdfa}
     .case.threat{border-left:4px solid var(--red)}
-    .static-flow{margin:18px 0;padding:18px;border:1px solid #efc7c4;border-radius:12px;background:var(--red-bg);font-weight:750;text-align:center}
+    .static-flow{margin:14px 0;padding:14px;border:1px solid #efc7c4;border-radius:11px;background:var(--red-bg)}
+    .static-flow h3{color:var(--red)}
+    .field-guide{display:flex;flex-wrap:wrap;gap:7px;margin:-4px 0 14px}
+    .field-guide span{padding:6px 9px;border-radius:7px;background:var(--gray-bg);color:#526174;font-size:12px}
+    .flow-track{display:flex;align-items:stretch;gap:7px;overflow-x:auto;padding:5px 0 9px}
+    .flow-step{display:grid;place-items:center;flex:1 0 112px;min-height:62px;padding:9px;border:1px solid #d6dee8;border-radius:9px;background:#fff;color:#344257;font-size:12px;font-weight:750;text-align:center}
+    .flow-step.reject{border-color:var(--red);background:#ffe3e1;color:#942e28}
+    .flow-step.block{border-color:var(--amber);background:var(--amber-bg);color:#835008}
+    .flow-arrow{align-self:center;flex:0 0 auto;color:var(--red);font-size:19px;font-weight:900}
     .compare{width:100%;border-collapse:collapse}
     .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
-    th,td{padding:13px 15px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+    th,td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
     th{background:#f2f5f8;font-size:13px}
     tr:last-child td{border:0}
     .invariant-grid{grid-template-columns:repeat(2,1fr);counter-reset:inv}
     .invariant{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start}
     .invariant:before{counter-increment:inv;content:counter(inv);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--violet);color:#fff;font-weight:900}
-    .sources{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-    .source-card{padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--blue-bg)}
+    .sources{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .source-card{padding:14px;border:1px solid var(--line);border-radius:11px;background:var(--blue-bg)}
     .source-link{display:block;font-weight:800;text-decoration:none}
     .source-card p{margin:7px 0 0;color:var(--muted);font-size:13px}
-    footer{padding:30px;color:var(--muted);font-size:13px;text-align:center}
+    footer{padding:22px;color:var(--muted);font-size:13px;text-align:center}
     @media(max-width:900px){
       .topbar .wrap{width:100%;padding:0 14px}.toc{display:none}
-      section,.hero{padding:30px}.principles,.four-grid{grid-template-columns:repeat(2,1fr)}
+      section,.hero{padding:24px}.principles,.four-grid,.assignment-map{grid-template-columns:repeat(2,1fr)}
+      .plain-story{grid-template-columns:repeat(3,1fr)}.story-card:nth-child(3)::after{display:none}
       .nodes{grid-template-columns:repeat(2,1fr)}.step-meta{grid-template-columns:repeat(2,1fr)}
     }
     @media(max-width:640px){
       body{font-size:15px}.wrap{width:min(100% - 20px,1180px)}
-      section,.hero{margin:12px auto;padding:22px;border-radius:14px}
-      .summary,.principles,.four-grid,.three-grid,.ux-grid,.case-grid,.boundary-grid,.policy-grid,.sources,.data-row,.invariant-grid{grid-template-columns:1fr}
+      .topbar .wrap{gap:8px}.brand{font-size:13px}.print{padding:8px 9px;font-size:0}.print::after{content:"PDF";font-size:11px}
+      h1{font-size:clamp(36px,12vw,48px);overflow-wrap:anywhere}
+      section,.hero{margin:10px auto;padding:18px;border-radius:14px}
+      .summary,.principles,.four-grid,.three-grid,.ux-grid,.case-grid,.boundary-grid,.policy-grid,.sources,.data-row,.invariant-grid,.assignment-map,.plain-story{grid-template-columns:1fr}
+      .story-card::after{display:none}
       .approval{grid-column:auto}.nodes{grid-template-columns:1fr}.step{grid-template-columns:40px 1fr}.step-no{width:36px;height:36px}
       .step-meta{grid-template-columns:1fr}.case dl{grid-template-columns:1fr}.buttons{justify-content:stretch}.btn{width:100%}
+      .diagram-card{padding:12px}.arch-svg{min-width:690px}
     }
     @media print{
       @page{size:A4;margin:12mm}
@@ -138,9 +199,11 @@
       .topbar,.print{display:none!important}.wrap{width:100%;max-width:none}
       main{padding:0}section,.hero{margin:0 0 8mm;padding:8mm;border:1px solid #bbb;border-radius:0;box-shadow:none;break-before:auto}
       h1{font-size:35pt}h2{font-size:23pt}
-      .principle,.info-card,.state-card,.ux-card,.case,.invariant,.boundary,.step,.step-body,.zone,.state-machine,.table-wrap{break-inside:avoid;box-shadow:none}
-      .case-grid{grid-template-columns:1fr 1fr;gap:4mm}.case{padding:4mm}.case dd{font-size:8.5pt}
+      .principle,.info-card,.state-card,.ux-card,.case,.invariant,.boundary,.step,.step-body,.zone,.state-machine,.table-wrap,.assignment-card,.story-card,.remember{break-inside:avoid;box-shadow:none}
+      .case-grid{grid-template-columns:1fr 1fr;gap:4mm}.case{padding:4mm}.case dl{grid-template-columns:1fr}.case dd{font-size:8.5pt}
       .step-meta{grid-template-columns:repeat(5,1fr)}.nodes{grid-template-columns:repeat(4,1fr)}
+      .diagram-card{padding:4mm}.arch-svg,.state-svg{max-height:155mm}.flow-track{flex-wrap:wrap;overflow:visible}.flow-step{flex:1 1 27mm;min-height:15mm}.flow-arrow{transform:rotate(0)}
+      .assignment-map{grid-template-columns:repeat(4,1fr)}.plain-story{grid-template-columns:repeat(3,1fr)}
       a{color:#111;text-decoration:none}.source-card{background:#fff}
     }
   </style>
@@ -150,11 +213,16 @@
     <div class="wrap">
       <a class="brand" href="#top">Cloud Agent Sandbox</a>
       <nav class="toc" aria-label="Mục lục">
-        <a href="#architecture">Kiến trúc</a><a href="#boundaries">Trust</a><a href="#security">Security</a>
-        <a href="#state">State</a><a href="#ux">UX</a><a href="#happy">Happy Path</a>
-        <a href="#failures">Failures</a><a href="#abuse">Abuse</a><a href="#production">MVP/Prod</a>
-      </nav>
-      <button class="print" type="button" onclick="window.print()">Print / Save PDF</button>
+       <a href="#architecture">Architecture</a>
+<a href="#boundaries">Trust</a>
+<a href="#security">Security</a>
+<a href="#state">State</a>
+<a href="#ux">UX</a>
+<a href="#happy">Happy Path</a>
+<a href="#failures">Failures</a>
+<a href="#abuse">Abuse</a>
+<a href="#production">MVP/Prod</a>      </nav>
+      <a class="flow-view" href="./index3.html">Xem trực quan hóa luồng →</a>
     </div>
   </header>
 
@@ -163,6 +231,18 @@
       <span class="eyebrow">Architecture &amp; UX Design </span>
       <h1>Cloud Agent Sandbox</h1>
       <p class="lead">Kiến trúc cloud an toàn để AI agent chạy code, duyệt web và thao tác file.</p>
+      <p class="audience-note"><strong>Cách đọc báo cáo:</strong> bắt đầu bằng bốn câu hỏi của đề bài bên dưới. Mỗi phần lần lượt cho biết agent làm gì, hệ thống bảo vệ ra sao, người dùng nhìn thấy gì và kết quả cuối có an toàn không.</p>
+      <div class="assignment-map">
+        <article class="assignment-card"><span>1</span><h3>Agent làm việc ở đâu?</h3><p>Code và Browser chạy trong hai Firecracker microVM riêng, không dùng chung filesystem hoặc socket.</p></article>
+        <article class="assignment-card"><span>2</span><h3>Điều gì giữ an toàn?</h3><p>Network mặc định bị chặn; credential ở ngoài sandbox; file phải qua quarantine và scan.</p></article>
+        <article class="assignment-card"><span>3</span><h3>Điều gì được lưu?</h3><p>Plan, workflow, file version, receipt và audit được giữ; RAM, token và file tạm bị xóa.</p></article>
+        <article class="assignment-card"><span>4</span><h3>Khi nào user quyết định?</h3><p>Ngay trước upload, gửi, xóa hoặc hành động bên ngoài có hậu quả.</p></article>
+      </div>
+      <div class="glossary">
+        <span><b>microVM</b> = máy ảo nhỏ, cô lập</span><span><b>Control Plane</b> = bộ điều phối đáng tin cậy</span>
+        <span><b>Quarantine</b> = khu cách ly file</span><span><b>Typed action</b> = hành động có cấu trúc rõ ràng</span>
+        <span><b>Outbox</b> = sổ ghi ý định và kết quả</span>
+      </div>
       <div class="summary">
         <ul>
           <li>Production dùng hai Firecracker microVM riêng cho Code và Browser.</li>
@@ -178,50 +258,128 @@
         </ul>
       </div>
       <div class="principles">
-        <article class="principle"><h3>Isolation by default</h3><p>Guest kernel, filesystem, identity và quota độc lập.</p></article>
-        <article class="principle"><h3>Brokered authority</h3><p>Credential Broker giữ token; Executor thực hiện typed action.</p></article>
-        <article class="principle"><h3>Durable state</h3><p>Checkpoint, version, outbox và receipt cho recovery an toàn.</p></article>
-        <article class="principle"><h3>Human consequence control</h3><p>Chặn tại điểm mở rộng quyền hoặc side effect.</p></article>
+        <article class="principle"><h3>Mặc định phải cô lập</h3><p>Guest kernel, filesystem, identity và quota độc lập.</p></article>
+        <article class="principle"><h3>Agent không tự cầm quyền</h3><p>Credential Broker giữ token; Executor thực hiện typed action.</p></article>
+        <article class="principle"><h3>Có thể dừng và phục hồi</h3><p>Checkpoint, version, outbox và receipt cho recovery an toàn.</p></article>
+        <article class="principle"><h3>User quyết định đúng lúc</h3><p>Chặn tại điểm mở rộng quyền hoặc side effect.</p></article>
       </div>
     </section>
 
     <section id="architecture">
-      <div class="section-head"><span class="eyebrow">02 · Static Architecture</span><h2>24 node, tám trust boundary</h2><p>Authority ở Control Plane; mọi execution không tin cậy nằm ngoài. Các đường dữ liệu quan trọng được ghi rõ để vẫn đọc được khi in.</p></div>
+      <div class="section-head"><span class="eyebrow">02 · Static Architecture</span><h2>Hệ thống hoạt động như thế nào?</h2><p>Trước tiên hãy đọc luồng sáu bước. Ba sơ đồ phía sau giải thích chi tiết cùng một luồng; danh mục 24 thành phần nằm cuối phần để tra cứu.</p></div>
+      <div class="plain-story">
+        <div class="story-card"><b>1</b><strong>User giao việc</strong><small>Chọn file, mục tiêu và phạm vi.</small></div>
+        <div class="story-card"><b>2</b><strong>Hệ thống lập kế hoạch</strong><small>Control Plane kiểm tra policy và risk.</small></div>
+        <div class="story-card"><b>3</b><strong>Agent làm việc</strong><small>Code và Browser chạy tách biệt.</small></div>
+        <div class="story-card"><b>4</b><strong>File được kiểm tra</strong><small>Artifact vào quarantine trước khi rời hệ thống.</small></div>
+        <div class="story-card"><b>5</b><strong>User xem và duyệt</strong><small>Đích, file, hậu quả và scope đều rõ.</small></div>
+        <div class="story-card"><b>6</b><strong>Hành động được thực hiện</strong><small>Executor upload và lưu receipt/audit.</small></div>
+      </div>
+      <div class="remember"><strong>Chỉ cần nhớ:</strong> agent không trực tiếp cầm credential, Code không nối thẳng với Browser, file chưa scan không được upload, và user quyết định trước hành động có hậu quả.</div>
       <div class="legend"><span><i class="blue"></i>System flow</span><span><i class="cyan"></i>Deterministic infrastructure</span><span><i class="violet"></i>Security control</span><span><i class="amber"></i>Approval/quarantine</span><span><i class="red"></i>Blocked</span><span><i class="green"></i>Verified</span><span><i class="gray"></i>External context</span></div>
       <div class="architecture">
-        <div class="zone user-zone"><span class="zone-title">1 · User &amp; Human-in-the-loop</span><div class="nodes"><div class="node" data-arch-node>User / Human-in-the-loop UI<small>Goal · Preview · Approval · Review</small></div></div></div>
+        <h3 class="tech-label">Chi tiết kỹ thuật — đọc từng sơ đồ độc lập</h3>
+        <div class="diagram-grid">
+          <article class="diagram-card">
+            <h3>a) Một yêu cầu đi từ user đến kết quả như thế nào?</h3>
+            <p class="muted">Hai microVM làm việc riêng. File đi vào khu scan; kết quả scan quay về Control Plane trước khi export được phép.</p>
+            <svg class="arch-svg overview-svg" viewBox="0 0 1000 360" role="img" aria-labelledby="overview-title overview-desc">
+              <title id="overview-title">Sơ đồ tổng quan Cloud Agent Sandbox</title>
+              <desc id="overview-desc">User gọi Control Plane. Control Plane cấp Code và Browser microVM riêng. Hai microVM chỉ chuyển artifact vào Quarantine. Scan result quay lại Control Plane trước khi approved export.</desc>
+              <defs><marker id="arrow-overview" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#8595a8"/></marker></defs>
+              <g>
+                <path class="edge" d="M155 170H210"/><path class="edge" d="M390 145C420 145 420 90 450 90"/><path class="edge" d="M390 175C420 175 420 255 450 255"/>
+                <path class="edge" d="M605 90C645 90 645 155 675 155"/><path class="edge" d="M605 255C645 255 645 185 675 185"/>
+                <path class="edge" d="M755 135V30H300V110"/><path class="edge" d="M300 200V325H925V205"/>
+              </g>
+              <rect class="svg-box system" x="20" y="135" width="135" height="70"/><text x="87" y="166"><tspan x="87">User / HITL</tspan><tspan x="87" dy="17">UI</tspan></text>
+              <rect class="svg-box security" x="210" y="110" width="180" height="90"/><text x="300" y="148"><tspan x="300">Trusted</tspan><tspan x="300" dy="18">Control Plane</tspan></text>
+              <rect class="svg-box infra" x="450" y="55" width="155" height="70"/><text x="527" y="86"><tspan x="527">Code Firecracker</tspan><tspan x="527" dy="17">microVM</tspan></text>
+              <rect class="svg-box infra" x="450" y="220" width="155" height="70"/><text x="527" y="251"><tspan x="527">Browser Firecracker</tspan><tspan x="527" dy="17">microVM</tspan></text>
+              <rect class="svg-box approval-node" x="675" y="135" width="160" height="70"/><text x="755" y="166"><tspan x="755">Quarantine</tspan><tspan x="755" dy="17">Scanner Cell</tspan></text>
+              <rect class="svg-box external" x="865" y="135" width="125" height="70"/><text x="927" y="166"><tspan x="927">Approved</tspan><tspan x="927" dy="17">Destination</tspan></text>
+              <text class="edge-label" x="182" y="160">request</text><text class="edge-label" x="421" y="106">capability</text><text class="edge-label" x="422" y="239">capability</text>
+              <text class="edge-label" x="640" y="113">artifact</text><text class="edge-label" x="640" y="239">download ref</text><text class="edge-label" x="520" y="21">scan result + manifest</text><text class="edge-label" x="610" y="344">approved typed export</text>
+              <text class="edge-label" x="527" y="160">NO DIRECT EDGE / SOCKET / SHARED FS</text>
+            </svg>
+          </article>
+          <article class="diagram-card">
+            <h3>b) Ai kiểm tra và cấp quyền cho hành động?</h3>
+            <p class="muted">Policy đánh giá risk, Approval ghi nhận quyết định, Broker cấp quyền ngắn hạn, Executor hành động và Outbox lưu dấu vết.</p>
+            <svg class="arch-svg control-svg" viewBox="0 0 1000 260" role="img" aria-labelledby="control-title control-desc">
+              <title id="control-title">Quan hệ gọi trong Trusted Control Plane</title>
+              <desc id="control-desc">Policy Engine đánh giá, Approval Service ký quyết định, Credential Broker cấp token ngắn hạn, Action Executor thực hiện typed action và Transactional Outbox lưu intent cùng receipt.</desc>
+              <defs><marker id="arrow-control" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#7047b8"/></marker></defs>
+              <g>
+                <path class="edge" d="M180 115H215"/><path class="edge" d="M375 115H410"/><path class="edge" d="M570 115H605"/><path class="edge" d="M765 100H800"/>
+                <path class="edge dashed" d="M800 145H765"/><path class="edge dashed" d="M605 155H570"/><path class="edge dashed" d="M215 155H180"/>
+              </g>
+              <rect class="svg-box security" x="20" y="80" width="160" height="90"/><text x="100" y="120"><tspan x="100">Policy</tspan><tspan x="100" dy="18">Engine</tspan></text>
+              <rect class="svg-box approval-node" x="215" y="80" width="160" height="90"/><text x="295" y="120"><tspan x="295">Approval</tspan><tspan x="295" dy="18">Service</tspan></text>
+              <rect class="svg-box security" x="410" y="80" width="160" height="90"/><text x="490" y="120"><tspan x="490">Credential</tspan><tspan x="490" dy="18">Broker</tspan></text>
+              <rect class="svg-box security" x="605" y="80" width="160" height="90"/><text x="685" y="120"><tspan x="685">Action</tspan><tspan x="685" dy="18">Executor</tspan></text>
+              <rect class="svg-box infra" x="800" y="80" width="180" height="90"/><text x="890" y="111"><tspan x="890">Idempotency Store /</tspan><tspan x="890" dy="18">Transactional Outbox</tspan></text>
+              <text class="edge-label" x="197" y="102">risk verdict</text><text class="edge-label" x="392" y="102">signed approval</text><text class="edge-label" x="587" y="102">scoped grant</text><text class="edge-label" x="782" y="87">record intent</text>
+              <text class="edge-label" x="782" y="169">receipt/status</text><text class="edge-label" x="587" y="179">token request</text><text class="edge-label" x="197" y="179">scope change</text>
+            </svg>
+          </article>
+          <article class="diagram-card">
+            <h3>c) Credential đi đâu — và không đi đâu?</h3>
+            <p class="muted">Secret thật ở Vault/KMS. Sandbox chỉ dùng opaque handle; token ngắn hạn chỉ được gắn vào exact request của Action Executor.</p>
+            <svg class="arch-svg credential-svg" viewBox="0 0 1000 270" role="img" aria-labelledby="credential-title credential-desc">
+              <title id="credential-title">Luồng credential ngắn hạn</title>
+              <desc id="credential-desc">Vault cấp credential cho Broker. Sandbox chỉ gửi opaque handle đến Broker. Broker cấp token ngắn hạn cho Action Executor, Executor gọi External API.</desc>
+              <defs><marker id="arrow-credential" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#7047b8"/></marker></defs>
+              <g>
+                <path class="edge" d="M180 65C225 65 225 120 270 120"/><path class="edge dashed" d="M180 210C225 210 225 150 270 150"/>
+                <path class="edge" d="M430 135H485"/><path class="edge" d="M615 135H670"/><path class="edge" d="M830 135H870"/>
+              </g>
+              <rect class="svg-box security" x="20" y="30" width="160" height="70"/><text x="100" y="71">Vault / KMS</text>
+              <rect class="svg-box infra" x="20" y="175" width="160" height="70"/><text x="100" y="201"><tspan x="100">Sandbox</tspan><tspan x="100" dy="17">no raw credential</tspan></text>
+              <rect class="svg-box security" x="270" y="100" width="160" height="70"/><text x="350" y="126"><tspan x="350">Credential</tspan><tspan x="350" dy="17">Broker</tspan></text>
+              <rect class="svg-box approval-node" x="485" y="100" width="130" height="70"/><text x="550" y="126"><tspan x="550">Short-lived</tspan><tspan x="550" dy="17">token</tspan></text>
+              <rect class="svg-box security" x="670" y="100" width="160" height="70"/><text x="750" y="126"><tspan x="750">Action</tspan><tspan x="750" dy="17">Executor</tspan></text>
+              <rect class="svg-box external" x="870" y="100" width="120" height="70"/><text x="930" y="126"><tspan x="930">External</tspan><tspan x="930" dy="17">API</tspan></text>
+              <text class="edge-label" x="225" y="70">Vault-only secret</text><text class="edge-label" x="225" y="215">opaque handle</text><text class="edge-label" x="457" y="122">mint</text><text class="edge-label" x="642" y="122">attach</text><text class="edge-label" x="850" y="122">typed request</text>
+            </svg>
+          </article>
+        </div>
+        <h3 class="inventory-title">Danh mục 24 thành phần — dùng để tra cứu</h3>
+        <div class="architecture-inventory">
+        <div class="zone user-zone"><span class="zone-title">1 · User &amp; Human-in-the-loop</span><div class="nodes"><div class="node blue" data-arch-node>User / Human-in-the-loop UI<small>Goal · Preview · Approval · Review</small></div></div></div>
         <div class="flow-note">User request → API/Auth → Task Planner → Durable Workflow → Policy Engine</div>
         <div class="zone control-zone">
           <span class="zone-title">2 · Trusted Control Plane</span>
           <div class="nodes">
-            <div class="node" data-arch-node>API / Authentication</div><div class="node" data-arch-node>Task Planner</div>
-            <div class="node" data-arch-node>Durable Workflow</div><div class="node" data-arch-node>Policy Engine</div>
-            <div class="node" data-arch-node>Approval Service</div><div class="node" data-arch-node>Event / Audit Log</div>
-            <div class="node" data-arch-node>Scheduler / Attestation</div><div class="node" data-arch-node>Credential Broker<small>Giữ và cấp token ngắn hạn</small></div>
-            <div class="node" data-arch-node>Action Executor<small>Typed external side effect</small></div><div class="node" data-arch-node>Idempotency Store / Transactional Outbox</div>
-            <div class="node" data-arch-node>Workspace Version Service</div><div class="node" data-arch-node>Egress / DNS / SSRF / DLP Gateway</div>
-            <div class="node" data-arch-node>Artifact Policy / Quarantine Controller<small>Chỉ nhận result + manifest</small></div>
+            <div class="node violet" data-arch-node>API / Authentication</div><div class="node violet" data-arch-node>Task Planner</div>
+            <div class="node violet" data-arch-node>Durable Workflow</div><div class="node violet" data-arch-node>Policy Engine</div>
+            <div class="node amber" data-arch-node>Approval Service</div><div class="node violet" data-arch-node>Event / Audit Log</div>
+            <div class="node violet" data-arch-node>Scheduler / Attestation</div><div class="node violet" data-arch-node>Credential Broker<small>Giữ và cấp token ngắn hạn</small></div>
+            <div class="node violet" data-arch-node>Action Executor<small>Typed external side effect</small></div><div class="node cyan" data-arch-node>Idempotency Store / Transactional Outbox</div>
+            <div class="node cyan" data-arch-node>Workspace Version Service</div><div class="node violet" data-arch-node>Egress / DNS / SSRF / DLP Gateway</div>
+            <div class="node amber" data-arch-node>Artifact Policy / Quarantine Controller<small>Chỉ nhận result + manifest</small></div>
           </div>
           <div class="credential-zone">8 · Credential Boundary — raw credential không vào model, microVM, log, screenshot hoặc snapshot</div>
         </div>
         <div class="flow-note">Scheduler / Attestation → hai capability ngắn hạn → hai guest kernel và network identity riêng</div>
         <div class="data-row">
-          <div class="zone code-zone"><span class="zone-title">3 · Untrusted Code Boundary</span><div class="nodes"><div class="node" data-arch-node>Code Firecracker microVM<small>Terminal · packages · CoW /work</small></div></div></div>
-          <div class="zone browser-zone"><span class="zone-title">4 · Untrusted Browser Boundary</span><div class="nodes"><div class="node" data-arch-node>Browser Firecracker microVM<small>Chromium · fresh profile · download ref</small></div></div></div>
+          <div class="zone code-zone"><span class="zone-title">3 · Untrusted Code Boundary</span><div class="nodes"><div class="node cyan" data-arch-node>Code Firecracker microVM<small>Terminal · packages · CoW /work</small></div></div></div>
+          <div class="zone browser-zone"><span class="zone-title">4 · Untrusted Browser Boundary</span><div class="nodes"><div class="node cyan" data-arch-node>Browser Firecracker microVM<small>Chromium · fresh profile · download ref</small></div></div></div>
         </div>
         <div class="flow-note" id="typed-mediation">Browser microVM → typed extraction result / download reference → Control Plane mediation → structured data hoặc scanned reference → Code microVM</div>
         <div class="flow-note warn">Không có Browser → Code direct edge, shared filesystem hoặc socket</div>
-        <div class="zone quarantine-zone" id="quarantine-boundary"><span class="zone-title">5 · Separate Quarantine Boundary</span><div class="nodes"><div class="node" data-arch-node>Artifact Scanner / Detonation Cell<small>MIME · archive · AV/YARA · detonation</small></div></div></div>
+        <div class="zone quarantine-zone" id="quarantine-boundary"><span class="zone-title">5 · Separate Quarantine Boundary</span><div class="nodes"><div class="node amber" data-arch-node>Artifact Scanner / Detonation Cell<small>MIME · archive · AV/YARA · detonation</small></div></div></div>
         <div class="flow-note ok">Code/download ref → quarantine staging → Scanner Cell → scan result + manifest → Artifact Policy Controller → approval → Action Executor → approved export</div>
         <div class="data-row">
-          <div class="zone persist-zone"><span class="zone-title">6 · Persistent Storage</span><div class="nodes"><div class="node" data-arch-node>Persistent State Store</div><div class="node" data-arch-node>Clean Base Images</div></div></div>
-          <div class="zone external-zone"><span class="zone-title">7 · External Internet &amp; APIs</span><div class="nodes"><div class="node" data-arch-node>Selected User Files</div><div class="node" data-arch-node>Package Registry / Verified Mirror</div><div class="node" data-arch-node>Public Internet</div><div class="node" data-arch-node>External APIs / User Accounts</div><div class="node" data-arch-node>Approved Export Destination</div></div></div>
+          <div class="zone persist-zone"><span class="zone-title">6 · Persistent Storage</span><div class="nodes"><div class="node cyan" data-arch-node>Persistent State Store</div><div class="node cyan" data-arch-node>Clean Base Images</div></div></div>
+          <div class="zone external-zone"><span class="zone-title">7 · External Internet &amp; APIs</span><div class="nodes"><div class="node gray" data-arch-node>Selected User Files</div><div class="node green" data-arch-node>Package Registry / Verified Mirror</div><div class="node gray" data-arch-node>Public Internet</div><div class="node gray" data-arch-node>External APIs / User Accounts</div><div class="node green" data-arch-node>Approved Export Destination</div></div></div>
+        </div>
         </div>
       </div>
     </section>
 
     <section id="boundaries">
-      <div class="section-head"><span class="eyebrow">03 · Trust Boundaries</span><h2>Điều gì được phép đi qua</h2><p>Mỗi boundary có contract rõ ràng; prompt của agent không phải security boundary.</p></div>
+      <div class="section-head"><span class="eyebrow">03 · Trust Boundaries</span><h2>Ranh giới nào bảo vệ người dùng?</h2><p>Mỗi vùng quy định rõ thứ gì được đi vào, thứ gì được đi ra và thứ gì tuyệt đối không được vượt qua. Prompt của agent không phải security boundary.</p></div>
       <div class="boundary-grid">
         <article class="boundary"><h3>1. User &amp; UI · trusted intent surface</h3><dl><dt>Inside</dt><dd>Goal, plan preview, canonical approval, review.</dd><dt>Allowed</dt><dd>Authenticated intent và signed decision.</dd><dt>Never</dt><dd>Untrusted webpage không được giả làm system UI.</dd></dl></article>
         <article class="boundary"><h3>2. Trusted Control Plane</h3><dl><dt>Inside</dt><dd>Identity, workflow, policy, audit, brokers, state index.</dd><dt>Allowed</dt><dd>Typed command, capability, result và manifest.</dd><dt>Never</dt><dd>Không mount workspace hoặc parse/execute artifact với privilege.</dd></dl></article>
@@ -235,7 +393,7 @@
     </section>
 
     <section id="security">
-      <div class="section-head"><span class="eyebrow">04 · Execution &amp; Security Model</span><h2>Defense in depth, không dựa vào model compliance</h2></div>
+      <div class="section-head"><span class="eyebrow">04 · Execution &amp; Security Model</span><h2>Bốn lớp bảo vệ chính</h2><p>Hệ thống không chỉ “tin agent sẽ làm đúng”; mỗi lớp kỹ thuật giới hạn một loại rủi ro khác nhau.</p></div>
       <div class="four-grid">
         <article class="info-card"><h3>A. Execution</h3><ul><li>Dual Firecracker microVM</li><li>Signed read-only base image</li><li>Copy-on-write workspace</li><li>Non-root execution</li><li>CPU/RAM/PID/disk/time quotas</li><li>Clean warm pool</li><li>Separate identities</li></ul></article>
         <article class="info-card"><h3>B. Network</h3><ul><li>Default-deny egress</li><li>Controlled DNS</li><li>SSRF/metadata protection</li><li>Re-evaluate redirect/DNS</li><li>Method/body/domain policy</li><li>DLP và upload control</li><li>No proxy bypass</li></ul></article>
@@ -245,17 +403,38 @@
     </section>
 
     <section id="state">
-      <div class="section-head"><span class="eyebrow">05 · State Persistence</span><h2>Persist để resume; xóa để giảm blast radius</h2></div>
+      <div class="section-head"><span class="eyebrow">05 · State Persistence</span><h2>Sau khi phiên kết thúc, điều gì còn lại?</h2><p>Thông tin cần cho review và resume được lưu; dữ liệu có thể chứa secret hoặc malware bị xóa hay revoke.</p></div>
       <div class="three-grid">
         <article class="state-card persist"><h3>Persisted</h3><ul><li>Task plan, workflow, policy version</li><li>Approval receipt</li><li>Workspace versions và file diff</li><li>Artifact manifest</li><li>Idempotency/outbox record</li><li>External receipt và immutable audit</li><li>Browser profile chỉ khi opt-in</li></ul></article>
         <article class="state-card delete"><h3>Deleted after session</h3><ul><li>Process state và RAM</li><li><code>/tmp</code> và clipboard</li><li>Transient downloads</li><li>Non-persisted browser profile</li></ul></article>
         <article class="state-card revoke"><h3>Revoked / never snapshotted</h3><ul><li>Live sandbox capability</li><li>Short-lived access token</li><li>Plaintext/long-lived secret</li><li>OTP/password</li><li>Raw hidden model reasoning</li><li>Unscanned quarantine content</li></ul></article>
       </div>
-      <div class="state-machine"><h3>External side-effect state</h3><div class="state-line"><span>planned</span> → <span>authorized</span> → <span>executing</span> → <span>committed</span></div><div class="state-line ambiguous"><span>executing</span> → <span>unknown</span> → <span>reconcile</span> → <span>committed</span> hoặc <span>compensated / manual resolution</span></div><p>Unknown mutation không được retry mù. Hệ thống query provider receipt hoặc reconcile thủ công. Workspace commit dùng versioning và compare-and-swap.</p></div>
+      <div class="state-machine">
+        <h3>External side-effect state</h3>
+        <div class="remember"><strong>Cách đọc:</strong> đường trên là trường hợp bình thường. Nếu external service không trả lời rõ ràng, hệ thống đi xuống trạng thái <b>unknown</b>, kiểm tra receipt rồi mới kết luận; không tự upload lại.</div>
+        <svg class="state-svg" viewBox="0 0 1000 370" role="img" aria-labelledby="state-title state-desc">
+          <title id="state-title">State machine cho external side effect</title>
+          <desc id="state-desc">Luồng chính từ planned tới committed. Từ executing có thể chuyển sang unknown. Unknown đi qua reconcile để committed hoặc đi tới compensated và manual resolution.</desc>
+          <defs><marker id="arrow-state" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#8595a8"/></marker></defs>
+          <path class="edge" d="M170 85H250"/><path class="edge" d="M410 85H490"/><path class="edge" d="M650 85H810"/>
+          <path class="edge" d="M570 125V205"/><path class="edge" d="M650 245H710"/><path class="edge" d="M790 205V125"/>
+          <path class="edge" d="M570 285V330H765"/>
+          <rect class="svg-box normal-state" x="20" y="45" width="150" height="80"/><text x="95" y="90">planned</text>
+          <rect class="svg-box normal-state" x="250" y="45" width="160" height="80"/><text x="330" y="90">authorized</text>
+          <rect class="svg-box normal-state" x="490" y="45" width="160" height="80"/><text x="570" y="90">executing</text>
+          <rect class="svg-box success-state" x="810" y="45" width="160" height="80"/><text x="890" y="90">committed</text>
+          <rect class="svg-box unknown-state" x="490" y="205" width="160" height="80"/><text x="570" y="250">unknown</text>
+          <rect class="svg-box unknown-state" x="710" y="205" width="160" height="80"/><text x="790" y="250">reconcile</text>
+          <rect class="svg-box manual-state" x="765" y="310" width="205" height="55"/><text x="867" y="342">compensated / manual resolution</text>
+          <text class="edge-label" x="210" y="72">policy verdict</text><text class="edge-label" x="450" y="72">start request</text><text class="edge-label" x="730" y="72">receipt verified</text>
+          <text class="edge-label" x="603" y="168">timeout / ambiguous</text><text class="edge-label" x="680" y="232">query receipt</text><text class="edge-label" x="672" y="352">compensate hoặc manual</text>
+        </svg>
+        <p>Unknown mutation không được retry mù. Hệ thống query provider receipt hoặc reconcile thủ công. Workspace commit dùng versioning và compare-and-swap.</p>
+      </div>
     </section>
 
     <section id="ux">
-      <div class="section-head"><span class="eyebrow">06 · Human-in-the-loop UX</span><h2>Canonical UI tại điểm có hậu quả</h2><p>Read-only và reversible work chạy tự động; approval chỉ xuất hiện khi mở rộng quyền hoặc tạo external side effect.</p></div>
+      <div class="section-head"><span class="eyebrow">06 · Human-in-the-loop UX</span><h2>Người dùng nhìn thấy và kiểm soát gì?</h2><p>Việc chỉ đọc hoặc có thể hoàn tác chạy tự động. Approval chỉ xuất hiện ngay trước khi mở rộng quyền hoặc tạo external side effect.</p></div>
       <div class="ux-grid">
         <article class="ux-card"><h3>1. Plan Preview</h3><div class="wire"><div class="wire-row"><b>Mục tiêu</b><span>CSV → report.md → Project Drive</span></div><div class="wire-row"><b>Data</b><span>3 selected files</span></div><div class="wire-row"><b>Network</b><span>Public read + verified mirror</span></div><div class="wire-row"><b>Side effect</b><span>1 upload · approval required</span></div></div></article>
         <article class="ux-card"><h3>2. Live Activity</h3><div class="wire"><div class="wire-row"><b>Browser</b><span>Untrusted provenance</span></div><div class="wire-row"><b>Code</b><span>Isolated · quota active</span></div><div class="wire-row"><b>Files</b><span>Versioned diff</span></div><div class="wire-row"><b>Controls</b><span>Pause · Stop · Revoke</span></div></div></article>
@@ -270,7 +449,7 @@
     </section>
 
     <section id="happy">
-      <div class="section-head"><span class="eyebrow">07 · Happy Path · illustrative UX scenario</span><h2>CSV → research → report.md → Project Drive</h2><p>“Đọc các CSV đã chọn, nghiên cứu thông tin công khai còn thiếu, tạo báo cáo Markdown và upload báo cáo đã duyệt vào Project Drive.”</p></div>
+      <div class="section-head"><span class="eyebrow">07 · Happy Path · illustrative UX scenario</span><h2>Một phiên làm việc bình thường</h2><p><b>Ví dụ:</b> “Đọc các CSV đã chọn, nghiên cứu thông tin công khai còn thiếu, tạo báo cáo Markdown và upload báo cáo đã duyệt vào Project Drive.”</p></div>
       <div class="timeline">
         <article class="step" data-happy-step><span class="step-no">1</span><div class="step-body"><h3>Parse goal &amp; classify data/risk</h3><div class="step-meta"><div><b>System</b>Tạo constrained plan</div><div><b>Control</b>Typed plan + policy</div><div><b>User sees</b>Scope, data, domains, budget</div><div><b>State</b>plan.v1</div><div><b>Outcome</b>Plan constrained</div></div></div></article>
         <article class="step" data-happy-step><span class="step-no">2</span><div class="step-body"><h3>Allocate &amp; attest Code + Browser microVM</h3><div class="step-meta"><div><b>System</b>Tạo hai Firecracker VM</div><div><b>Control</b>Signed image + attestation</div><div><b>User sees</b>Environment ready, quotas</div><div><b>State</b>Session metadata</div><div><b>Outcome</b>2 isolated guests</div></div></div></article>
@@ -290,7 +469,8 @@
     </section>
 
     <section id="failures">
-      <div class="section-head"><span class="eyebrow">08 · Failure Cases</span><h2>12 failure mode và recovery contract</h2><p>Không case nào bị ẩn. Bốn case đại diện được nhấn mạnh.</p></div>
+      <div class="section-head"><span class="eyebrow">08 · Failure Cases</span><h2>Nếu hệ thống gặp lỗi thì sao?</h2><p>12 trường hợp dưới đây cho biết lỗi bắt đầu từ đâu, hệ thống phát hiện thế nào, user thấy gì và trạng thái cuối ra sao. Bốn case đại diện được nhấn mạnh.</p></div>
+      <div class="field-guide"><span><b>Trigger</b> = nguyên nhân</span><span><b>Detection</b> = cách phát hiện</span><span><b>Containment</b> = cách cô lập</span><span><b>Recovery</b> = cách phục hồi</span><span><b>Final</b> = kết quả cuối</span></div>
       <div class="case-grid">
         <article class="case" data-failure-case><span class="tag">Runtime</span><h3>1. Code/tool loop vô hạn</h3><dl><dt>Trigger</dt><dd>Bug hoặc injection gây loop/cost.</dd><dt>Detection</dt><dd>Watchdog, wall/tool/token budget.</dd><dt>Containment</dt><dd>Stop process tree.</dd><dt>Recovery</dt><dd>Giữ safe workspace checkpoint.</dd><dt>UX</dt><dd>Limit, partial result, request extension.</dd><dt>Owner</dt><dd>Runtime / Workflow</dd><dt>Final</dt><dd>Stopped; no external side effect.</dd></dl></article>
         <article class="case emphasis" data-failure-case><span class="tag">Featured</span><h3>2. Sandbox crash</h3><dl><dt>Trigger</dt><dd>VMM/guest failure.</dd><dt>Detection</dt><dd>Heartbeat và health check.</dd><dt>Containment</dt><dd>Isolate failed VM.</dd><dt>Recovery</dt><dd>Clean VM + scanned workspace + safe replay.</dd><dt>UX</dt><dd>“Recovered; no external action repeated.”</dd><dt>Owner</dt><dd>Scheduler</dd><dt>Final</dt><dd>Transient state lost; durable checkpoint intact.</dd></dl></article>
@@ -308,9 +488,32 @@
     </section>
 
     <section id="abuse">
-      <div class="section-head"><span class="eyebrow">09 · Abuse Cases</span><h2>16 adversarial paths, visible end-to-end</h2><p>Prevention không phụ thuộc classifier duy nhất; containment, audit và user explanation là một phần của design.</p></div>
-      <div class="static-flow">Prompt injection: Untrusted website → provenance label → Reader extracts data → malicious instruction attempts action → Reader/Actor boundary rejects authority transfer → Policy mismatch → Credential Broker refuses → Gateway blocks destination → audit → user warning</div>
-      <div class="static-flow">Approval spoof: Fake approval content → marked untrusted → canonical Approval UI stays separate → action mismatch → no signed receipt → Action Executor refuses → no side effect</div>
+      <div class="section-head"><span class="eyebrow">09 · Abuse Cases</span><h2>Nếu có người hoặc nội dung xấu thì sao?</h2><p>16 đường tấn công được theo dõi từ điểm vào đến kết quả cuối. Hệ thống không phụ thuộc một classifier duy nhất; phòng ngừa, phát hiện, cô lập, audit và giải thích cho user đều là một phần của design.</p></div>
+      <div class="field-guide"><span><b>Entry</b> = điểm tấn công</span><span><b>Impact</b> = thiệt hại có thể xảy ra</span><span><b>Prevention</b> = cách ngăn</span><span><b>Detection</b> = cách phát hiện</span><span><b>Outcome</b> = kết quả cuối</span></div>
+      <div class="static-flow">
+        <h3>Prompt injection</h3>
+        <div class="flow-track">
+          <span class="flow-step">Untrusted website</span><span class="flow-arrow" aria-hidden="true">→</span>
+          <span class="flow-step">Provenance label<br>Reader extracts data</span><span class="flow-arrow" aria-hidden="true">→</span>
+          <span class="flow-step">Malicious instruction attempts action</span><span class="flow-arrow" aria-hidden="true">→</span>
+          <span class="flow-step reject">Reader/Actor boundary rejects authority transfer</span><span class="flow-arrow" aria-hidden="true">→</span>
+          <span class="flow-step block">Policy mismatch</span><span class="flow-arrow" aria-hidden="true">→</span>
+          <span class="flow-step reject">Credential Broker refuses</span><span class="flow-arrow" aria-hidden="true">→</span>
+          <span class="flow-step reject">Gateway blocks destination</span><span class="flow-arrow" aria-hidden="true">→</span>
+          <span class="flow-step">Audit event<br>User warning</span>
+        </div>
+      </div>
+      <div class="static-flow">
+        <h3>Approval spoof</h3>
+        <div class="flow-track">
+          <span class="flow-step">Fake approval content</span><span class="flow-arrow" aria-hidden="true">→</span>
+          <span class="flow-step">Marked untrusted</span><span class="flow-arrow" aria-hidden="true">→</span>
+          <span class="flow-step">Canonical Approval UI stays separate</span><span class="flow-arrow" aria-hidden="true">→</span>
+          <span class="flow-step block">Action mismatch<br>No signed receipt</span><span class="flow-arrow" aria-hidden="true">→</span>
+          <span class="flow-step reject">Action Executor refuses</span><span class="flow-arrow" aria-hidden="true">→</span>
+          <span class="flow-step reject">No side effect</span>
+        </div>
+      </div>
       <div class="case-grid">
         <article class="case threat" data-abuse-case><h3>1. Fork bomb</h3><dl><dt>Entry</dt><dd>Shell/package hook.</dd><dt>Impact</dt><dd>Compute DoS.</dd><dt>Prevention</dt><dd>PID/cgroup, no privilege.</dd><dt>Detection</dt><dd>PID growth.</dd><dt>Recovery</dt><dd>Kill tree.</dd><dt>UX</dt><dd>Quota violation explained.</dd><dt>Owner</dt><dd>Runtime</dd><dt>Outcome</dt><dd>Contained.</dd></dl></article>
         <article class="case threat" data-abuse-case><h3>2. Crypto mining</h3><dl><dt>Entry</dt><dd>Binary/script.</dd><dt>Impact</dt><dd>Cost abuse.</dd><dt>Prevention</dt><dd>CPU/time/egress caps.</dd><dt>Detection</dt><dd>Sustained CPU/pool protocol.</dd><dt>Recovery</dt><dd>Terminate; preserve audit.</dd><dt>UX</dt><dd>Session stopped.</dd><dt>Owner</dt><dd>Abuse/Runtime</dd><dt>Outcome</dt><dd>Account review.</dd></dl></article>
@@ -332,7 +535,7 @@
     </section>
 
     <section id="production">
-      <div class="section-head"><span class="eyebrow">10 · MVP versus Production</span><h2>Giữ nguyên boundary, thay runtime theo maturity</h2></div>
+      <div class="section-head"><span class="eyebrow">10 · MVP versus Production</span><h2>Từ bản thử nghiệm đến hệ thống production</h2><p>MVP dùng công nghệ đơn giản hơn nhưng giữ nguyên ranh giới an toàn và cách user phê duyệt.</p></div>
       <div class="table-wrap"><table class="compare"><thead><tr><th>Capability</th><th>MVP</th><th>Production target</th></tr></thead><tbody>
         <tr><td>Isolation</td><td>Dedicated Kubernetes nodes, gVisor RuntimeClass, separate Code/Browser pods</td><td>Dual Firecracker microVM; separate Code, Browser và Quarantine cells</td></tr>
         <tr><td>Startup/scheduling</td><td>Dedicated node pool</td><td>Clean warm snapshots + risk-aware scheduler</td></tr>
@@ -347,7 +550,7 @@
     </section>
 
     <section id="invariants">
-      <div class="section-head"><span class="eyebrow">11 · Security Invariants</span><h2>Mười điều hệ thống không được vi phạm</h2></div>
+      <div class="section-head"><span class="eyebrow">11 · Security Invariants</span><h2>Mười luật an toàn không được phá vỡ</h2><p>Nếu một thiết kế hoặc thay đổi vi phạm bất kỳ luật nào dưới đây, nó không được đưa vào production.</p></div>
       <div class="invariant-grid">
         <div class="invariant">Long-lived plaintext credential không vào sandbox, model context, logs, screenshots hoặc snapshots.</div>
         <div class="invariant">Sandbox không có route tới control plane, metadata hoặc private network mặc định.</div>
@@ -363,7 +566,7 @@
     </section>
 
     <section id="sources">
-      <div class="section-head"><span class="eyebrow">12 · Sources &amp; Documents</span><h2>Nguồn sự thật và quy ước bằng chứng</h2><p><b>Ngày thiết kế:</b>  <b>Production recommendation:</b> dual Firecracker microVM + controlled egress + Credential Broker + typed Action Executor + Transactional Outbox + separate quarantine.</p></div>
+      <div class="section-head"><span class="eyebrow">12 · Sources &amp; Documents</span><h2>Tài liệu nguồn và cách kiểm chứng</h2><p><b>Production recommendation:</b> dual Firecracker microVM + controlled egress + Credential Broker + typed Action Executor + Transactional Outbox + separate quarantine.</p></div>
       <div class="sources">
         <article class="source-card">
           <a class="source-link" href="./document.html?doc=deliverable">Xem Architecture &amp; UX deliverable →</a>
