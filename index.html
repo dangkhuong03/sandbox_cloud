@@ -167,6 +167,33 @@
     th,td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
     th{background:#f2f5f8;font-size:13px}
     tr:last-child td{border:0}
+    .matrix-wrap{position:relative;overflow-x:auto;margin-top:14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+    .matrix-table{width:max-content;min-width:100%;border-collapse:separate;border-spacing:0;font-size:12px;line-height:1.45}
+    .matrix-table th{position:sticky;z-index:2;top:0;min-width:155px;padding:10px 12px;border-right:1px solid var(--line);border-bottom:1px solid #cbd5e1;background:#eaf0f6;color:#344257;white-space:nowrap}
+    .matrix-table td{min-width:155px;max-width:230px;padding:10px 12px;border-right:1px solid #e7ebf0;border-bottom:1px solid #e7ebf0}
+    .matrix-table th:first-child,.matrix-table td:first-child{position:sticky;z-index:1;left:0;min-width:230px;max-width:260px;background:#fff}
+    .matrix-table th:first-child{z-index:3;background:#eaf0f6}
+    .matrix-table tbody tr:nth-child(even) td{background:#f8fafc}
+    .matrix-table tbody tr:nth-child(even) td:first-child{background:#f8fafc}
+    .matrix-table tbody tr.featured-row td{background:#fff9e9}
+    .matrix-table tbody tr.featured-row td:first-child{background:#fff9e9}
+    .matrix-case-title{display:block;color:var(--ink);font-size:13px;font-weight:850}
+    .matrix-case-tag{display:inline-block;margin-bottom:5px;padding:2px 6px;border-radius:5px;background:var(--gray-bg);color:var(--gray);font-size:9px;font-weight:850;text-transform:uppercase}
+    .matrix-cell-text{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3}
+    .matrix-table tbody tr{cursor:help}
+    .matrix-table tbody tr:hover td,.matrix-table tbody tr:focus td{background:var(--blue-bg);outline:1px solid rgba(40,103,216,.22);outline-offset:-1px}
+    .matrix-table tbody tr:hover td:first-child,.matrix-table tbody tr:focus td:first-child{background:var(--blue-bg)}
+    .matrix-hint{margin:8px 0 10px;padding:9px 11px;border-left:3px solid var(--blue);border-radius:0 8px 8px 0;background:var(--blue-bg);color:#344257;font-size:12px}
+    .matrix-row-card{position:fixed;z-index:1000;width:min(440px,calc(100vw - 24px));max-height:min(70vh,560px);overflow:auto;padding:14px;border:1px solid #b8c7d8;border-radius:12px;background:#fff;color:var(--ink);box-shadow:0 18px 45px rgba(23,32,51,.24);font-size:13px;line-height:1.45;pointer-events:none}
+    .matrix-row-card[hidden]{display:none}
+    .matrix-row-card h3{margin:0 0 10px;padding-right:60px;font-size:16px}
+    .matrix-row-card dl{display:grid;grid-template-columns:118px 1fr;gap:0;margin:0}
+    .matrix-row-card dt,.matrix-row-card dd{margin:0;padding:7px 0;border-bottom:1px solid #e7ebf0}
+    .matrix-row-card dt{color:var(--muted);font-size:11px;font-weight:850;text-transform:uppercase}
+    .matrix-row-card dd{font-size:13px}
+    .matrix-row-card .matrix-case-tag{float:right;margin:0}
+    .timeline[hidden],.case-grid[hidden]{display:none!important}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     .invariant-grid{grid-template-columns:repeat(2,1fr);counter-reset:inv}
     .invariant{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start}
     .invariant:before{counter-increment:inv;content:counter(inv);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--violet);color:#fff;font-weight:900}
@@ -231,7 +258,7 @@
       <span class="eyebrow">Architecture &amp; UX Design </span>
       <h1>Cloud Agent Sandbox</h1>
       <p class="lead">Kiến trúc cloud an toàn để AI agent chạy code, duyệt web và thao tác file.</p>
-      <p class="audience-note"><strong>Cách đọc báo cáo:</strong> bắt đầu bằng bốn câu hỏi của đề bài bên dưới. Mỗi phần lần lượt cho biết agent làm gì, hệ thống bảo vệ ra sao, người dùng nhìn thấy gì và kết quả cuối có an toàn không.</p>
+      <p class="audience-note"><strong>Đọc báo cáo:</strong> bắt đầu bằng bốn câu hỏi của đề bài bên dưới. Mỗi phần lần lượt cho biết agent làm gì, hệ thống bảo vệ ra sao, người dùng nhìn thấy gì và kết quả cuối có an toàn không.</p>
       <div class="assignment-map">
         <article class="assignment-card"><span>1</span><h3>Agent làm việc ở đâu?</h3><p>Code và Browser chạy trong hai Firecracker microVM riêng, không dùng chung filesystem hoặc socket.</p></article>
         <article class="assignment-card"><span>2</span><h3>Điều gì giữ an toàn?</h3><p>Network mặc định bị chặn; credential ở ngoài sandbox; file phải qua quarantine và scan.</p></article>
@@ -411,7 +438,7 @@
       </div>
       <div class="state-machine">
         <h3>External side-effect state</h3>
-        <div class="remember"><strong>Cách đọc:</strong> đường trên là trường hợp bình thường. Nếu external service không trả lời rõ ràng, hệ thống đi xuống trạng thái <b>unknown</b>, kiểm tra receipt rồi mới kết luận; không tự upload lại.</div>
+        <div class="remember"><strong>Đọc:</strong> đường trên là trường hợp bình thường. Nếu external service không trả lời rõ ràng, hệ thống đi xuống trạng thái <b>unknown</b>, kiểm tra receipt rồi mới kết luận; không tự upload lại.</div>
         <svg class="state-svg" viewBox="0 0 1000 370" role="img" aria-labelledby="state-title state-desc">
           <title id="state-title">State machine cho external side effect</title>
           <desc id="state-desc">Luồng chính từ planned tới committed. Từ executing có thể chuyển sang unknown. Unknown đi qua reconcile để committed hoặc đi tới compensated và manual resolution.</desc>
@@ -581,5 +608,182 @@
     </section>
   </main>
   <footer>Cloud Agent Sandbox · Static architecture report · GitHub Pages ready</footer>
+  <script>
+    (() => {
+      const rowCard = document.createElement("aside");
+      rowCard.className = "matrix-row-card";
+      rowCard.hidden = true;
+      rowCard.setAttribute("aria-live", "polite");
+      document.body.appendChild(rowCard);
+
+      const hideRowCard = () => {
+        rowCard.hidden = true;
+      };
+
+      const showRowCard = (trigger, item, headers) => {
+        rowCard.replaceChildren();
+
+        if (item.tag) {
+          const badge = document.createElement("span");
+          badge.className = "matrix-case-tag";
+          badge.textContent = item.tag;
+          rowCard.appendChild(badge);
+        }
+
+        const title = document.createElement("h3");
+        title.textContent = item.title;
+        rowCard.appendChild(title);
+
+        const details = document.createElement("dl");
+        item.values.forEach((value, index) => {
+          const term = document.createElement("dt");
+          term.textContent = headers[index + 1];
+          const description = document.createElement("dd");
+          description.textContent = value || "—";
+          details.append(term, description);
+        });
+        rowCard.appendChild(details);
+        rowCard.hidden = false;
+
+        const triggerRect = trigger.getBoundingClientRect();
+        const cardRect = rowCard.getBoundingClientRect();
+        const left = Math.max(12, Math.min(triggerRect.left + 36, window.innerWidth - cardRect.width - 12));
+        const below = triggerRect.bottom + 8;
+        const top = below + cardRect.height <= window.innerHeight - 12
+          ? below
+          : Math.max(12, triggerRect.top - cardRect.height - 8);
+        rowCard.style.left = `${left}px`;
+        rowCard.style.top = `${top}px`;
+      };
+
+      const cellText = (element, labelSelector) => {
+        const clone = element.cloneNode(true);
+        const label = clone.querySelector(labelSelector);
+        if (label) label.remove();
+        return clone.textContent.trim();
+      };
+
+      const createMatrix = ({source, caption, headers, rows}) => {
+        if (!source || !rows.length) return;
+
+        const wrap = document.createElement("div");
+        wrap.className = "matrix-wrap";
+        wrap.tabIndex = 0;
+        wrap.setAttribute("role", "region");
+        wrap.setAttribute("aria-label", caption);
+
+        const table = document.createElement("table");
+        table.className = "matrix-table";
+
+        const tableCaption = document.createElement("caption");
+        tableCaption.className = "sr-only";
+        tableCaption.textContent = caption;
+        table.appendChild(tableCaption);
+
+        const head = document.createElement("thead");
+        const headRow = document.createElement("tr");
+        headers.forEach((header) => {
+          const th = document.createElement("th");
+          th.scope = "col";
+          th.textContent = header;
+          headRow.appendChild(th);
+        });
+        head.appendChild(headRow);
+        table.appendChild(head);
+
+        const body = document.createElement("tbody");
+        rows.forEach((item) => {
+          const {title, tag, values, featured} = item;
+          const row = document.createElement("tr");
+          if (featured) row.className = "featured-row";
+          row.tabIndex = 0;
+          row.setAttribute("aria-label", `Xem chi tiết: ${title}`);
+          row.addEventListener("mouseenter", () => showRowCard(row, item, headers));
+          row.addEventListener("mouseleave", hideRowCard);
+          row.addEventListener("focus", () => showRowCard(row, item, headers));
+          row.addEventListener("blur", hideRowCard);
+
+          const titleCell = document.createElement("td");
+          if (tag) {
+            const badge = document.createElement("span");
+            badge.className = "matrix-case-tag";
+            badge.textContent = tag;
+            titleCell.appendChild(badge);
+          }
+          const strong = document.createElement("strong");
+          strong.className = "matrix-case-title";
+          strong.textContent = title;
+          titleCell.appendChild(strong);
+          row.appendChild(titleCell);
+
+          values.forEach((value) => {
+            const td = document.createElement("td");
+            const fullValue = value || "—";
+            const text = document.createElement("span");
+            text.className = "matrix-cell-text";
+            text.textContent = fullValue;
+            td.appendChild(text);
+            row.appendChild(td);
+          });
+          body.appendChild(row);
+        });
+        table.appendChild(body);
+        wrap.appendChild(table);
+
+        const hint = document.createElement("p");
+        hint.className = "matrix-hint";
+        hint.textContent = "Đọc matrix: mỗi hàng là một bước/case, mỗi cột là một tiêu chí. Di chuột hoặc dùng phím Tab vào một hàng để mở thẻ thông tin đầy đủ như giao diện card trước đây; cuộn ngang để so sánh thêm cột.";
+        source.before(hint, wrap);
+        source.remove();
+      };
+
+      const happySource = document.querySelector("#happy .timeline");
+      const happyRows = [...document.querySelectorAll("[data-happy-step]")].map((step) => ({
+        title: `${step.querySelector(".step-no").textContent}. ${step.querySelector("h3").textContent}`,
+        values: [...step.querySelectorAll(".step-meta > div")].map((item) => cellText(item, "b")),
+        featured: false
+      }));
+      createMatrix({
+        source: happySource,
+        caption: "Happy Path matrix",
+        headers: ["Bước", "System", "Control", "User sees", "State", "Outcome"],
+        rows: happyRows
+      });
+
+      const caseRows = (selector, fields) => [...document.querySelectorAll(selector)].map((item) => {
+        const values = {};
+        item.querySelectorAll("dt").forEach((term) => {
+          values[term.textContent.trim()] = term.nextElementSibling?.textContent.trim() || "";
+        });
+        return {
+          title: item.querySelector("h3").textContent.trim(),
+          tag: item.querySelector(".tag")?.textContent.trim() || "",
+          values: fields.map((field) => values[field] || ""),
+          featured: item.classList.contains("emphasis")
+        };
+      });
+
+      const failureSource = document.querySelector("#failures .case-grid");
+      const failureFields = ["Trigger", "Detection", "Containment", "Recovery", "UX", "Owner", "Final"];
+      createMatrix({
+        source: failureSource,
+        caption: "Failure Cases matrix",
+        headers: ["Failure case", ...failureFields],
+        rows: caseRows("[data-failure-case]", failureFields)
+      });
+
+      const abuseSource = document.querySelector("#abuse .case-grid");
+      const abuseFields = ["Entry", "Impact", "Prevention", "Detection", "Recovery", "UX", "Owner", "Outcome"];
+      createMatrix({
+        source: abuseSource,
+        caption: "Abuse Cases matrix",
+        headers: ["Abuse case", ...abuseFields],
+        rows: caseRows("[data-abuse-case]", abuseFields)
+      });
+
+      window.addEventListener("scroll", hideRowCard, {passive: true});
+      window.addEventListener("resize", hideRowCard);
+    })();
+  </script>
 </body>
 </html>
