@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive architecture for a secure cloud agent sandbox.">
+  <title>Cloud Agent Sandbox</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#architecture-canvas">Bỏ qua đến sơ đồ kiến trúc</a>
+
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <div>
+          <h1>Cloud Agent Sandbox</h1>
+          <p>Safe code, browser, and file execution</p>
+        </div>
+      </div>
+
+      <nav class="mode-tabs" aria-label="Chế độ mô phỏng">
+        <button class="mode-tab active" data-mode="happy" aria-selected="true">
+          <span class="tab-dot blue"></span>Happy Path
+        </button>
+        <button class="mode-tab" data-mode="failures" aria-selected="false">
+          <span class="tab-dot amber"></span>Failure Cases
+        </button>
+        <button class="mode-tab" data-mode="abuse" aria-selected="false">
+          <span class="tab-dot red"></span>Abuse Cases
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <button id="play-toggle" class="icon-text-button" aria-label="Tạm dừng hoạt ảnh">
+          <span class="button-icon" aria-hidden="true">Ⅱ</span>
+          <span class="button-label">Tạm dừng</span>
+        </button>
+        <button id="replay-button" class="icon-text-button" aria-label="Phát lại case">
+          <span class="button-icon" aria-hidden="true">↻</span>
+          <span>Phát lại</span>
+        </button>
+        <label class="auto-toggle">
+          <input id="autoplay-toggle" type="checkbox" checked>
+          <span class="toggle-track"></span>
+          <span>Tự chạy</span>
+        </label>
+        <div class="docs-menu">
+          <button id="docs-menu-button" class="icon-text-button" aria-expanded="false">
+            <span class="button-icon" aria-hidden="true">≡</span>
+            <span>Tài liệu</span>
+          </button>
+          <div id="docs-popover" class="docs-popover" hidden>
+            <a href="./document.html?doc=deliverable">Bản deliverable</a>
+            <a href="./document.html?doc=research">Kiến trúc &amp; nghiên cứu</a>
+          </div>
+        </div>
+      </div>
+
+      <button id="navigator-drawer-button" class="mobile-panel-button" aria-label="Mở danh sách case">☰</button>
+    </header>
+
+    <main class="workspace">
+      <aside id="case-navigator" class="case-navigator" aria-label="Danh sách case">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">Case navigator</span>
+            <h2 id="navigator-title">Happy Path</h2>
+          </div>
+          <span id="case-count" class="count-badge">13</span>
+          <button class="panel-close" data-close-panel="case-navigator" aria-label="Đóng danh sách case">×</button>
+        </div>
+        <p id="navigator-description" class="panel-intro">
+          Theo dõi hành trình an toàn từ prompt đến artifact được upload.
+        </p>
+        <div id="case-list" class="case-list" role="listbox" aria-label="Các bước Happy Path"></div>
+      </aside>
+
+      <section class="canvas-region" aria-label="Sơ đồ kiến trúc tương tác">
+        <div class="canvas-toolbar">
+          <div class="canvas-context">
+            <span id="scenario-label" class="scenario-label">Kịch bản minh họa</span>
+            <strong id="canvas-title">CSV → báo cáo → Project Drive</strong>
+          </div>
+          <div class="zoom-controls" aria-label="Điều khiển sơ đồ">
+            <button id="zoom-out" title="Thu nhỏ" aria-label="Thu nhỏ">−</button>
+            <button id="zoom-in" title="Phóng to" aria-label="Phóng to">＋</button>
+            <button id="zoom-reset" title="Tỷ lệ 100%">100%</button>
+            <button id="zoom-fit" title="Vừa màn hình">Vừa khung</button>
+          </div>
+        </div>
+
+        <div id="architecture-canvas" class="architecture-canvas" tabindex="0"
+             aria-label="Kiến trúc Cloud Agent Sandbox. Giữ Ctrl và cuộn để zoom, kéo để di chuyển.">
+          <div id="canvas-world" class="canvas-world">
+            <svg id="edge-layer" class="edge-layer" width="1600" height="980"
+                 viewBox="0 0 1600 980" aria-hidden="true"></svg>
+
+            <div class="trust-zone zone-user">
+              <div class="zone-label">
+                <span class="zone-kicker">Ranh giới 1</span>
+                User &amp; Human-in-the-loop
+                <small>Nơi người dùng giao mục tiêu và kiểm soát hành động</small>
+              </div>
+            </div>
+            <div class="trust-zone zone-control">
+              <div class="zone-label">
+                <span class="zone-kicker">Ranh giới 2</span>
+                Trusted Control Plane
+                <small>Policy, workflow và approvals được thực thi tại đây</small>
+              </div>
+            </div>
+            <div class="trust-zone zone-code">
+              <div class="zone-label">
+                <span class="zone-kicker">Ranh giới 3</span>
+                Untrusted Code microVM
+                <small>Kernel, filesystem, network identity và quota riêng</small>
+              </div>
+            </div>
+            <div class="trust-zone zone-browser">
+              <div class="zone-label">
+                <span class="zone-kicker">Ranh giới 4</span>
+                Untrusted Browser microVM
+                <small>Không direct edge, socket hay shared filesystem với Code</small>
+              </div>
+            </div>
+            <div class="trust-zone zone-quarantine">
+              <div class="zone-label">
+                <span class="zone-kicker">Ranh giới 5</span>
+                Separate Quarantine Boundary
+                <small>Scanner chạy trong cell cô lập, không nằm trong Control Plane</small>
+              </div>
+            </div>
+            <div class="trust-zone zone-persistence">
+              <div class="zone-label">
+                <span class="zone-kicker">Ranh giới 6</span>
+                Persistent Storage
+                <small>Chỉ lưu state đã được policy cho phép</small>
+              </div>
+            </div>
+            <div class="trust-zone zone-external">
+              <div class="zone-label">
+                <span class="zone-kicker">Ranh giới 7</span>
+                External Internet &amp; APIs
+                <small>Chỉ truy cập qua gateway, credential và typed action</small>
+              </div>
+            </div>
+
+            <div id="node-layer" class="node-layer"></div>
+
+            <div id="mediation-note" class="mediation-note">
+              <span class="mediation-icon">⇄</span>
+              <strong>Typed Control Plane mediation</strong>
+              <small>Structured data hoặc scanned reference — không direct Browser → Code</small>
+            </div>
+
+            <div id="side-effect-panel" class="canvas-overlay side-effect-panel" hidden>
+              <span class="overlay-label">Side-effect state</span>
+              <div class="state-machine">
+                <span data-effect-state="planned">planned</span><i>→</i>
+                <span data-effect-state="authorized">authorized</span><i>→</i>
+                <span data-effect-state="executing">executing</span><i>→</i>
+                <span data-effect-state="committed">committed</span>
+                <div class="unknown-branch">
+                  <b>↘</b><span data-effect-state="unknown">unknown</span><i>→</i>
+                  <span data-effect-state="reconcile">reconcile</span><i>→</i>
+                  <span data-effect-state="resolution">committed / manual</span>
+                </div>
+              </div>
+              <small>Không tuyên bố “exactly once”; outcome không rõ luôn được đối soát.</small>
+            </div>
+
+            <div id="state-summary-panel" class="canvas-overlay state-summary-panel" hidden>
+              <div class="state-column persisted">
+                <h4>Persisted</h4>
+                <div id="persisted-items"></div>
+              </div>
+              <div class="state-column deleted">
+                <h4>Deleted</h4>
+                <div id="deleted-items"></div>
+              </div>
+              <div class="state-column revoked">
+                <h4>Revoked</h4>
+                <div id="revoked-items"></div>
+              </div>
+              <div class="state-column never">
+                <h4>Never snapshotted</h4>
+                <div id="never-items"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="legend" aria-label="Chú giải màu sắc">
+          <span><i class="legend-dot normal"></i>Thực thi bình thường</span>
+          <span><i class="legend-dot infra"></i>Hạ tầng deterministic</span>
+          <span><i class="legend-dot security"></i>Policy / credential</span>
+          <span><i class="legend-dot approval"></i>Chờ phê duyệt</span>
+          <span><i class="legend-dot blocked"></i>Đã chặn</span>
+          <span><i class="legend-dot success"></i>Hoàn tất / phục hồi</span>
+        </div>
+      </section>
+
+      <aside id="case-inspector" class="case-inspector" aria-label="Chi tiết case">
+        <div class="panel-heading inspector-heading">
+          <div>
+            <span id="inspector-mode" class="eyebrow">Happy Path</span>
+            <h2 id="inspector-title">Run complete Happy Path</h2>
+          </div>
+          <span id="inspector-severity" class="severity-badge low">Low</span>
+          <button class="panel-close" data-close-panel="case-inspector" aria-label="Đóng chi tiết case">×</button>
+        </div>
+
+        <div class="phase-callout">
+          <span id="phase-number">01</span>
+          <div>
+            <small>Đang diễn ra</small>
+            <strong id="phase-title">Phân tích mục tiêu</strong>
+          </div>
+        </div>
+
+        <div id="inspector-components" class="protecting-components">
+          <span>Thành phần đang bảo vệ hành động</span>
+          <div id="component-chips"></div>
+        </div>
+
+        <dl id="inspector-fields" class="inspector-fields"></dl>
+
+        <div class="invariant-card">
+          <span class="invariant-icon" aria-hidden="true">◇</span>
+          <div>
+            <small>Security invariant</small>
+            <p id="invariant-text">External side effect phải đi qua typed action và policy.</p>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="execution-status">
+      <div class="status-topline">
+        <div class="playback-controls">
+          <button id="previous-step" aria-label="Bước trước">←</button>
+          <button id="footer-play-toggle" class="primary-play" aria-label="Tạm dừng">Ⅱ</button>
+          <button id="next-step" aria-label="Bước tiếp">→</button>
+          <label class="speed-control">
+            <span>Tốc độ</span>
+            <select id="speed-select" aria-label="Tốc độ hoạt ảnh">
+              <option value="1800">0.75×</option>
+              <option value="1350" selected>1×</option>
+              <option value="850">1.5×</option>
+              <option value="500">2×</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="progress-area">
+          <div class="progress-copy">
+            <span id="progress-phase">Planning</span>
+            <strong id="progress-message">Đang phân loại mục tiêu và dữ liệu</strong>
+            <span id="progress-fraction">1 / 12</span>
+          </div>
+          <div class="progress-track"><span id="progress-fill"></span></div>
+        </div>
+
+        <button id="inspector-sheet-button" class="mobile-panel-button inspector-button"
+                aria-label="Mở chi tiết case">ⓘ</button>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-item"><span>Node</span><strong id="status-node">Task Planner</strong></div>
+        <div class="status-item"><span>Sandbox</span><strong id="status-sandbox">Chưa cấp phát</strong></div>
+        <div class="status-item"><span>Network</span><strong id="status-network">Default deny</strong></div>
+        <div class="status-item credential-status"><span>Credential</span><strong id="status-credential">Absent</strong></div>
+        <div class="status-item"><span>Approval</span><strong id="status-approval">Not required</strong></div>
+        <div class="status-item resource-status">
+          <span>CPU / RAM / Disk / Time</span>
+          <div class="resource-bars">
+            <i id="cpu-bar"></i><i id="ram-bar"></i><i id="disk-bar"></i><i id="time-bar"></i>
+          </div>
+          <strong id="resource-copy">08 / 12 / 04 / 03%</strong>
+        </div>
+        <div class="status-item side-effect-status"><span>Side effect</span><strong id="status-side-effect">None</strong></div>
+        <div class="status-item outcome-status"><span>Kết quả</span><strong id="status-outcome">Đang chạy an toàn</strong></div>
+      </div>
+    </footer>
+  </div>
+
+  <dialog id="approval-dialog" class="approval-dialog" aria-labelledby="approval-title">
+    <form method="dialog">
+      <header class="approval-header">
+        <div class="system-ui-badge">SYSTEM-RENDERED APPROVAL</div>
+        <button value="reject" class="dialog-close" aria-label="Đóng và từ chối">×</button>
+      </header>
+      <div class="approval-title-row">
+        <div class="approval-shield" aria-hidden="true">◇</div>
+        <div>
+          <span>Phê duyệt external side effect</span>
+          <h2 id="approval-title">Upload report.md to Project Drive</h2>
+        </div>
+      </div>
+
+      <div class="approval-grid">
+        <div><span>Agent muốn làm gì?</span><strong>Upload một báo cáo Markdown đã scan</strong></div>
+        <div><span>Dữ liệu hoặc tài nguyên?</span><strong>report.md · SHA-256 8f2a…91c4</strong></div>
+        <div><span>Gửi tới đâu?</span><strong>Project Drive / Cloud Sandbox Demo</strong></div>
+        <div><span>Hậu quả / blast radius?</span><strong>Tạo một file trong project đã chọn</strong></div>
+        <div><span>Có thể hoàn tác?</span><strong>Có · có thể xóa file đã upload</strong></div>
+        <div><span>Scope và expiry?</span><strong id="approval-scope-copy">Chỉ hành động này · 5 phút</strong></div>
+      </div>
+
+      <fieldset class="approval-scope">
+        <legend>Phạm vi phê duyệt</legend>
+        <label>
+          <input type="radio" name="approval-scope" value="once" checked>
+          <span><strong>Chỉ hành động này</strong><small>Một file, một destination, một lần</small></span>
+        </label>
+        <label>
+          <input type="radio" name="approval-scope" value="batch">
+          <span><strong>Batch chính xác gồm 1 artifact</strong><small>Gắn với manifest và hash hiện tại</small></span>
+        </label>
+      </fieldset>
+
+      <div class="scan-proof">
+        <span class="scan-check">✓</span>
+        <div><strong>Artifact đã qua quarantine</strong><small>Malware: clean · Manifest: verified · Policy: promotable</small></div>
+      </div>
+
+      <div id="simulated-approval-note" class="simulated-note">
+        Auto-play: <strong>Giả lập người dùng phê duyệt</strong> sau <span id="approval-countdown">3</span>s
+      </div>
+
+      <footer class="approval-actions">
+        <button value="stop" class="danger-ghost">Dừng tác vụ</button>
+        <button value="reject" class="secondary-action">Từ chối</button>
+        <button id="approve-upload" value="approve" class="primary-action">
+          Upload report.md to Project Drive
+        </button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="./experience-data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

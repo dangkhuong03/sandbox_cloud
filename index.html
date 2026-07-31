@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Architecture và UX design tĩnh cho Cloud Agent Sandbox.">
+  <title>Cloud Agent Sandbox — Architecture &amp; UX Report</title>
+  <style>
+    :root{--ink:#172033;--muted:#5c687a;--line:#dce3eb;--paper:#fff;--bg:#f4f7fa;--blue:#2867d8;--blue-bg:#edf4ff;--cyan:#087f94;--cyan-bg:#eafafd;--violet:#7047b8;--violet-bg:#f4effd;--amber:#a86408;--amber-bg:#fff7e7;--red:#b63b35;--red-bg:#fff0ef;--green:#197449;--green-bg:#ebf8f1;--gray:#637184;--gray-bg:#f1f4f7;--radius:14px;--shadow:0 12px 35px rgba(30,47,67,.08)}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.58 system-ui,-apple-system,"Segoe UI",sans-serif}
+    a{color:var(--blue)}
+    button{font:inherit}
+    .wrap{width:min(1180px,calc(100% - 40px));margin:auto}
+    .topbar{position:sticky;z-index:20;top:0;border-bottom:1px solid var(--line);background:rgba(255,255,255,.95);backdrop-filter:blur(10px)}
+    .topbar .wrap{display:flex;align-items:center;gap:20px;min-height:58px}
+    .brand{margin-right:auto;color:var(--ink);font-weight:800;text-decoration:none}
+    .toc{display:flex;gap:4px;overflow:auto;white-space:nowrap;scrollbar-width:none}
+    .toc a{padding:7px 9px;border-radius:7px;color:var(--muted);font-size:12px;text-decoration:none}
+    .toc a:hover{background:var(--blue-bg);color:var(--blue)}
+    .print{flex:none;padding:8px 12px;border:1px solid var(--blue);border-radius:8px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer}
+    main{padding-bottom:70px}
+    section{scroll-margin-top:76px;margin:24px auto;padding:44px;border:1px solid var(--line);border-radius:20px;background:var(--paper);box-shadow:var(--shadow)}
+    .hero{margin-top:28px;padding:60px;background:linear-gradient(135deg,#fff 45%,#edf5ff)}
+    .eyebrow,.pill{display:inline-block;color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    h1{max-width:850px;margin:14px 0 12px;font-size:clamp(40px,7vw,72px);line-height:1;letter-spacing:-.055em}
+    .lead{max-width:800px;margin:0;color:#36445a;font-size:clamp(18px,2vw,24px)}
+    h2{margin:0 0 8px;font-size:clamp(27px,4vw,38px);line-height:1.15;letter-spacing:-.03em}
+    h3{margin:0 0 8px;font-size:18px;line-height:1.3}
+    h4{margin:0 0 6px;font-size:15px}
+    .section-head{max-width:820px;margin-bottom:28px}
+    .section-head p,.muted{color:var(--muted)}
+    .summary,.principles,.four-grid,.three-grid,.ux-grid,.case-grid,.invariant-grid,.boundary-grid{display:grid;gap:16px}
+    .summary{grid-template-columns:repeat(2,1fr);margin:32px 0}
+    .summary li{margin:8px 0}
+    .principles,.four-grid{grid-template-columns:repeat(4,1fr)}
+    .principle,.info-card,.state-card,.ux-card,.case,.invariant,.boundary{border:1px solid var(--line);border-radius:var(--radius);background:#fff}
+    .principle,.info-card,.state-card,.ux-card,.case,.invariant{padding:19px}
+    .principle{border-top:4px solid var(--blue)}
+    .principle:nth-child(2){border-top-color:var(--violet)} .principle:nth-child(3){border-top-color:var(--cyan)} .principle:nth-child(4){border-top-color:var(--amber)}
+    .legend{display:flex;flex-wrap:wrap;gap:14px;margin:18px 0 24px;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fafbfd;font-size:13px}
+    .legend i{display:inline-block;width:10px;height:10px;margin-right:6px;border-radius:50%;background:var(--c)}
+    .legend .blue{--c:var(--blue)}.legend .cyan{--c:var(--cyan)}.legend .violet{--c:var(--violet)}.legend .amber{--c:var(--amber)}.legend .red{--c:var(--red)}.legend .green{--c:var(--green)}.legend .gray{--c:var(--gray)}
+    .architecture{display:grid;gap:14px}
+    .zone{position:relative;padding:40px 16px 16px;border:2px solid var(--zone);border-radius:16px;background:var(--zone-bg)}
+    .zone-title{position:absolute;top:10px;left:14px;color:var(--zone-text);font-size:12px;font-weight:850;letter-spacing:.06em;text-transform:uppercase}
+    .nodes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .node{display:grid;align-content:center;min-height:70px;padding:11px;border:1px solid #cbd6e3;border-radius:10px;background:#fff;box-shadow:0 3px 10px rgba(27,45,68,.06);font-size:13px;font-weight:800;text-align:center}
+    .node small{display:block;margin-top:3px;color:var(--muted);font-size:11px;font-weight:500}
+    .user-zone{--zone:#86aef1;--zone-bg:var(--blue-bg);--zone-text:var(--blue)}
+    .control-zone{--zone:#ad90dd;--zone-bg:var(--violet-bg);--zone-text:var(--violet)}
+    .data-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .code-zone,.browser-zone{--zone:#70c6d3;--zone-bg:var(--cyan-bg);--zone-text:var(--cyan)}
+    .quarantine-zone{--zone:#e4ae53;--zone-bg:var(--amber-bg);--zone-text:var(--amber)}
+    .persist-zone{--zone:#98a7b8;--zone-bg:var(--gray-bg);--zone-text:var(--gray)}
+    .external-zone{--zone:#b2bcc8;--zone-bg:#f8f9fb;--zone-text:var(--gray)}
+    .credential-zone{margin-top:10px;padding:10px;border:2px dashed var(--violet);border-radius:10px;background:#fff;color:var(--violet);font-size:12px;text-align:center}
+    .flow-note{padding:12px;border-radius:10px;background:#e8f5ff;color:#195f91;font-size:13px;font-weight:750;text-align:center}
+    .flow-note.warn{background:var(--amber-bg);color:var(--amber)}
+    .flow-note.ok{background:var(--green-bg);color:var(--green)}
+    .flow-note.spaced{margin-top:18px}
+    .boundary-grid{grid-template-columns:repeat(2,1fr)}
+    .boundary{overflow:hidden}
+    .boundary h3{padding:14px 16px;background:var(--gray-bg)}
+    .boundary dl,.case dl{margin:0}
+    .boundary dl{padding:12px 16px}
+    dt{margin-top:8px;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+    dd{margin:2px 0 0}
+    .info-card ul,.state-card ul{margin:10px 0 0;padding-left:19px}
+    .info-card li,.state-card li{margin:6px 0}
+    .three-grid{grid-template-columns:repeat(3,1fr)}
+    .state-card.persist{border-top:4px solid var(--green)} .state-card.delete{border-top:4px solid var(--red)} .state-card.revoke{border-top:4px solid var(--violet)}
+    .state-machine{margin-top:20px;padding:20px;border:1px solid var(--line);border-radius:14px;background:#fafbfd}
+    .state-line{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:9px 0}
+    .state-line span{padding:7px 10px;border-radius:8px;background:var(--blue-bg);color:var(--blue);font-weight:800}
+    .state-line.ambiguous span{background:var(--amber-bg);color:var(--amber)}
+    .ux-grid{grid-template-columns:repeat(2,1fr)}
+    .ux-card{background:#fbfcfe}
+    .wire{margin-top:12px;padding:14px;border:1px solid #cfd8e3;border-radius:10px;background:#fff}
+    .wire-row{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px solid #edf0f3}
+    .wire-row:last-child{border:0}
+    .approval{grid-column:span 2;border:2px solid #dfad58;background:var(--amber-bg)}
+    .approval .wire{max-width:760px;margin:14px auto 0}
+    .choices{display:grid;gap:8px;margin:12px 0}
+    .buttons{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
+    .btn{padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;font-weight:750}
+    .btn.primary{border-color:var(--blue);background:var(--blue);color:#fff}
+    .btn.danger{color:var(--red)}
+    .policy-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+    .policy-box{padding:18px;border-radius:12px;background:var(--green-bg)} .policy-box.approve{background:var(--amber-bg)}
+    .timeline{position:relative;display:grid;gap:14px;margin-top:24px}
+    .step{display:grid;grid-template-columns:52px 1fr;gap:15px}
+    .step-no{display:grid;place-items:center;align-self:start;width:45px;height:45px;border-radius:50%;background:var(--blue);color:#fff;font-weight:900}
+    .step-body{padding:18px;border:1px solid var(--line);border-radius:13px;background:#fff}
+    .step-body h3{color:var(--blue)}
+    .step-meta{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px}
+    .step-meta div{padding:9px;border-radius:8px;background:#f6f8fa;font-size:12px}
+    .step-meta b{display:block;color:var(--muted);font-size:10px;text-transform:uppercase}
+    .case-grid{grid-template-columns:repeat(2,1fr)}
+    .case{position:relative}
+    .case h3{padding-right:70px}
+    .tag{position:absolute;top:17px;right:17px;padding:4px 7px;border-radius:6px;background:var(--gray-bg);color:var(--gray);font-size:10px;font-weight:850;text-transform:uppercase}
+    .case dl{display:grid;grid-template-columns:repeat(2,1fr);gap:0 14px}
+    .case dd{font-size:13px}
+    .case.emphasis{border:2px solid var(--amber);background:#fffdfa}
+    .case.threat{border-left:4px solid var(--red)}
+    .static-flow{margin:18px 0;padding:18px;border:1px solid #efc7c4;border-radius:12px;background:var(--red-bg);font-weight:750;text-align:center}
+    .compare{width:100%;border-collapse:collapse}
+    .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+    th,td{padding:13px 15px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+    th{background:#f2f5f8;font-size:13px}
+    tr:last-child td{border:0}
+    .invariant-grid{grid-template-columns:repeat(2,1fr);counter-reset:inv}
+    .invariant{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start}
+    .invariant:before{counter-increment:inv;content:counter(inv);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--violet);color:#fff;font-weight:900}
+    .sources{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .source-card{padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--blue-bg)}
+    .source-link{display:block;font-weight:800;text-decoration:none}
+    .source-card p{margin:7px 0 0;color:var(--muted);font-size:13px}
+    footer{padding:30px;color:var(--muted);font-size:13px;text-align:center}
+    @media(max-width:900px){
+      .topbar .wrap{width:100%;padding:0 14px}.toc{display:none}
+      section,.hero{padding:30px}.principles,.four-grid{grid-template-columns:repeat(2,1fr)}
+      .nodes{grid-template-columns:repeat(2,1fr)}.step-meta{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:640px){
+      body{font-size:15px}.wrap{width:min(100% - 20px,1180px)}
+      section,.hero{margin:12px auto;padding:22px;border-radius:14px}
+      .summary,.principles,.four-grid,.three-grid,.ux-grid,.case-grid,.boundary-grid,.policy-grid,.sources,.data-row,.invariant-grid{grid-template-columns:1fr}
+      .approval{grid-column:auto}.nodes{grid-template-columns:1fr}.step{grid-template-columns:40px 1fr}.step-no{width:36px;height:36px}
+      .step-meta{grid-template-columns:1fr}.case dl{grid-template-columns:1fr}.buttons{justify-content:stretch}.btn{width:100%}
+    }
+    @media print{
+      @page{size:A4;margin:12mm}
+      :root{--bg:#fff;--shadow:none}
+      html{scroll-behavior:auto}body{background:#fff;color:#111;font-size:10.5pt}
+      .topbar,.print{display:none!important}.wrap{width:100%;max-width:none}
+      main{padding:0}section,.hero{margin:0 0 8mm;padding:8mm;border:1px solid #bbb;border-radius:0;box-shadow:none;break-before:auto}
+      h1{font-size:35pt}h2{font-size:23pt}
+      .principle,.info-card,.state-card,.ux-card,.case,.invariant,.boundary,.step,.step-body,.zone,.state-machine,.table-wrap{break-inside:avoid;box-shadow:none}
+      .case-grid{grid-template-columns:1fr 1fr;gap:4mm}.case{padding:4mm}.case dd{font-size:8.5pt}
+      .step-meta{grid-template-columns:repeat(5,1fr)}.nodes{grid-template-columns:repeat(4,1fr)}
+      a{color:#111;text-decoration:none}.source-card{background:#fff}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="#top">Cloud Agent Sandbox</a>
+      <nav class="toc" aria-label="Mục lục">
+        <a href="#architecture">Kiến trúc</a><a href="#boundaries">Trust</a><a href="#security">Security</a>
+        <a href="#state">State</a><a href="#ux">UX</a><a href="#happy">Happy Path</a>
+        <a href="#failures">Failures</a><a href="#abuse">Abuse</a><a href="#production">MVP/Prod</a>
+      </nav>
+      <button class="print" type="button" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </header>
+
+  <main id="top" class="wrap">
+    <section class="hero">
+      <span class="eyebrow">Architecture &amp; UX Design · 30/07/2026</span>
+      <h1>Cloud Agent Sandbox</h1>
+      <p class="lead">Kiến trúc cloud an toàn để AI agent chạy code, duyệt web và thao tác file.</p>
+      <div class="summary">
+        <ul>
+          <li>Production dùng hai Firecracker microVM riêng cho Code và Browser.</li>
+          <li>Trusted Control Plane sở hữu policy, workflow, approval, credential, state và audit.</li>
+          <li>Network default-deny; không có route tới control plane, metadata hay private network.</li>
+          <li>Credential dài hạn luôn ở ngoài sandbox.</li>
+        </ul>
+        <ul>
+          <li>Browser và Code không có shared filesystem, direct socket hoặc direct edge.</li>
+          <li>Artifact phải được quarantine và scan trước export/upload.</li>
+          <li>External side effect chỉ xuất phát từ typed Action Executor.</li>
+          <li>Hành động nhạy cảm cần canonical human approval gắn với exact action.</li>
+        </ul>
+      </div>
+      <div class="principles">
+        <article class="principle"><h3>Isolation by default</h3><p>Guest kernel, filesystem, identity và quota độc lập.</p></article>
+        <article class="principle"><h3>Brokered authority</h3><p>Credential Broker giữ token; Executor thực hiện typed action.</p></article>
+        <article class="principle"><h3>Durable state</h3><p>Checkpoint, version, outbox và receipt cho recovery an toàn.</p></article>
+        <article class="principle"><h3>Human consequence control</h3><p>Chặn tại điểm mở rộng quyền hoặc side effect.</p></article>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <div class="section-head"><span class="eyebrow">02 · Static Architecture</span><h2>24 node, tám trust boundary</h2><p>Authority ở Control Plane; mọi execution không tin cậy nằm ngoài. Các đường dữ liệu quan trọng được ghi rõ để vẫn đọc được khi in.</p></div>
+      <div class="legend"><span><i class="blue"></i>System flow</span><span><i class="cyan"></i>Deterministic infrastructure</span><span><i class="violet"></i>Security control</span><span><i class="amber"></i>Approval/quarantine</span><span><i class="red"></i>Blocked</span><span><i class="green"></i>Verified</span><span><i class="gray"></i>External context</span></div>
+      <div class="architecture">
+        <div class="zone user-zone"><span class="zone-title">1 · User &amp; Human-in-the-loop</span><div class="nodes"><div class="node" data-arch-node>User / Human-in-the-loop UI<small>Goal · Preview · Approval · Review</small></div></div></div>
+        <div class="flow-note">User request → API/Auth → Task Planner → Durable Workflow → Policy Engine</div>
+        <div class="zone control-zone">
+          <span class="zone-title">2 · Trusted Control Plane</span>
+          <div class="nodes">
+            <div class="node" data-arch-node>API / Authentication</div><div class="node" data-arch-node>Task Planner</div>
+            <div class="node" data-arch-node>Durable Workflow</div><div class="node" data-arch-node>Policy Engine</div>
+            <div class="node" data-arch-node>Approval Service</div><div class="node" data-arch-node>Event / Audit Log</div>
+            <div class="node" data-arch-node>Scheduler / Attestation</div><div class="node" data-arch-node>Credential Broker<small>Giữ và cấp token ngắn hạn</small></div>
+            <div class="node" data-arch-node>Action Executor<small>Typed external side effect</small></div><div class="node" data-arch-node>Idempotency Store / Transactional Outbox</div>
+            <div class="node" data-arch-node>Workspace Version Service</div><div class="node" data-arch-node>Egress / DNS / SSRF / DLP Gateway</div>
+            <div class="node" data-arch-node>Artifact Policy / Quarantine Controller<small>Chỉ nhận result + manifest</small></div>
+          </div>
+          <div class="credential-zone">8 · Credential Boundary — raw credential không vào model, microVM, log, screenshot hoặc snapshot</div>
+        </div>
+        <div class="flow-note">Scheduler / Attestation → hai capability ngắn hạn → hai guest kernel và network identity riêng</div>
+        <div class="data-row">
+          <div class="zone code-zone"><span class="zone-title">3 · Untrusted Code Boundary</span><div class="nodes"><div class="node" data-arch-node>Code Firecracker microVM<small>Terminal · packages · CoW /work</small></div></div></div>
+          <div class="zone browser-zone"><span class="zone-title">4 · Untrusted Browser Boundary</span><div class="nodes"><div class="node" data-arch-node>Browser Firecracker microVM<small>Chromium · fresh profile · download ref</small></div></div></div>
+        </div>
+        <div class="flow-note" id="typed-mediation">Browser microVM → typed extraction result / download reference → Control Plane mediation → structured data hoặc scanned reference → Code microVM</div>
+        <div class="flow-note warn">Không có Browser → Code direct edge, shared filesystem hoặc socket</div>
+        <div class="zone quarantine-zone" id="quarantine-boundary"><span class="zone-title">5 · Separate Quarantine Boundary</span><div class="nodes"><div class="node" data-arch-node>Artifact Scanner / Detonation Cell<small>MIME · archive · AV/YARA · detonation</small></div></div></div>
+        <div class="flow-note ok">Code/download ref → quarantine staging → Scanner Cell → scan result + manifest → Artifact Policy Controller → approval → Action Executor → approved export</div>
+        <div class="data-row">
+          <div class="zone persist-zone"><span class="zone-title">6 · Persistent Storage</span><div class="nodes"><div class="node" data-arch-node>Persistent State Store</div><div class="node" data-arch-node>Clean Base Images</div></div></div>
+          <div class="zone external-zone"><span class="zone-title">7 · External Internet &amp; APIs</span><div class="nodes"><div class="node" data-arch-node>Selected User Files</div><div class="node" data-arch-node>Package Registry / Verified Mirror</div><div class="node" data-arch-node>Public Internet</div><div class="node" data-arch-node>External APIs / User Accounts</div><div class="node" data-arch-node>Approved Export Destination</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="boundaries">
+      <div class="section-head"><span class="eyebrow">03 · Trust Boundaries</span><h2>Điều gì được phép đi qua</h2><p>Mỗi boundary có contract rõ ràng; prompt của agent không phải security boundary.</p></div>
+      <div class="boundary-grid">
+        <article class="boundary"><h3>1. User &amp; UI · trusted intent surface</h3><dl><dt>Inside</dt><dd>Goal, plan preview, canonical approval, review.</dd><dt>Allowed</dt><dd>Authenticated intent và signed decision.</dd><dt>Never</dt><dd>Untrusted webpage không được giả làm system UI.</dd></dl></article>
+        <article class="boundary"><h3>2. Trusted Control Plane</h3><dl><dt>Inside</dt><dd>Identity, workflow, policy, audit, brokers, state index.</dd><dt>Allowed</dt><dd>Typed command, capability, result và manifest.</dd><dt>Never</dt><dd>Không mount workspace hoặc parse/execute artifact với privilege.</dd></dl></article>
+        <article class="boundary"><h3>3. Code microVM · untrusted</h3><dl><dt>Inside</dt><dd>Terminal, package tools, CoW workspace.</dd><dt>Allowed</dt><dd>Versioned input, verified package, structured data.</dd><dt>Never</dt><dd>Không credential dài hạn, metadata route hay Browser socket.</dd></dl></article>
+        <article class="boundary"><h3>4. Browser microVM · untrusted</h3><dl><dt>Inside</dt><dd>Chromium, fresh/opt-in profile, download staging.</dd><dt>Allowed</dt><dd>Filtered web traffic, typed extraction/download ref.</dd><dt>Never</dt><dd>Không shared filesystem hoặc direct connection tới Code.</dd></dl></article>
+        <article class="boundary"><h3>5. Separate Quarantine Cell</h3><dl><dt>Inside</dt><dd>Untrusted parser, scanner và detonation process.</dd><dt>Allowed</dt><dd>Artifact staging vào; scan result + manifest ra.</dd><dt>Never</dt><dd>Artifact chưa đạt policy không được export.</dd></dl></article>
+        <article class="boundary"><h3>6. Persistent Storage</h3><dl><dt>Inside</dt><dd>Workflow, versions, receipts, manifests, audit.</dd><dt>Allowed</dt><dd>Encrypted tenant-bound state theo retention policy.</dd><dt>Never</dt><dd>Không raw token, OTP, RAM hoặc unscanned snapshot.</dd></dl></article>
+        <article class="boundary"><h3>7. External Internet &amp; APIs</h3><dl><dt>Inside</dt><dd>Public web, registries, providers, destinations.</dd><dt>Allowed</dt><dd>Gateway-inspected read hoặc approved typed action.</dd><dt>Never</dt><dd>Không bypass DNS/proxy; không private/metadata destination.</dd></dl></article>
+        <article class="boundary"><h3>8. Credential Boundary</h3><dl><dt>Inside</dt><dd>Vault/KMS, refresh token, token exchange.</dd><dt>Allowed</dt><dd>Opaque handle và short-lived audience-bound token.</dd><dt>Never</dt><dd>Không long-lived secret trong sandbox, model, logs hay snapshot.</dd></dl></article>
+      </div>
+    </section>
+
+    <section id="security">
+      <div class="section-head"><span class="eyebrow">04 · Execution &amp; Security Model</span><h2>Defense in depth, không dựa vào model compliance</h2></div>
+      <div class="four-grid">
+        <article class="info-card"><h3>A. Execution</h3><ul><li>Dual Firecracker microVM</li><li>Signed read-only base image</li><li>Copy-on-write workspace</li><li>Non-root execution</li><li>CPU/RAM/PID/disk/time quotas</li><li>Clean warm pool</li><li>Separate identities</li></ul></article>
+        <article class="info-card"><h3>B. Network</h3><ul><li>Default-deny egress</li><li>Controlled DNS</li><li>SSRF/metadata protection</li><li>Re-evaluate redirect/DNS</li><li>Method/body/domain policy</li><li>DLP và upload control</li><li>No proxy bypass</li></ul></article>
+        <article class="info-card"><h3>C. Credential &amp; Action</h3><ul><li>Secret outside sandbox</li><li>Opaque credential handle</li><li>Short-lived/downscoped token</li><li>Audience-bound request</li><li>Canonical typed action</li><li>Policy + exact approval</li><li>Outbox + receipt</li></ul></article>
+        <article class="info-card"><h3>D. Artifact</h3><ul><li>Quarantine staging</li><li>MIME/archive validation</li><li>AV/YARA/policy scan</li><li>Suspicious-file detonation</li><li>Manifest + hash</li><li>Policy-controlled promotion</li></ul></article>
+      </div>
+    </section>
+
+    <section id="state">
+      <div class="section-head"><span class="eyebrow">05 · State Persistence</span><h2>Persist để resume; xóa để giảm blast radius</h2></div>
+      <div class="three-grid">
+        <article class="state-card persist"><h3>Persisted</h3><ul><li>Task plan, workflow, policy version</li><li>Approval receipt</li><li>Workspace versions và file diff</li><li>Artifact manifest</li><li>Idempotency/outbox record</li><li>External receipt và immutable audit</li><li>Browser profile chỉ khi opt-in</li></ul></article>
+        <article class="state-card delete"><h3>Deleted after session</h3><ul><li>Process state và RAM</li><li><code>/tmp</code> và clipboard</li><li>Transient downloads</li><li>Non-persisted browser profile</li></ul></article>
+        <article class="state-card revoke"><h3>Revoked / never snapshotted</h3><ul><li>Live sandbox capability</li><li>Short-lived access token</li><li>Plaintext/long-lived secret</li><li>OTP/password</li><li>Raw hidden model reasoning</li><li>Unscanned quarantine content</li></ul></article>
+      </div>
+      <div class="state-machine"><h3>External side-effect state</h3><div class="state-line"><span>planned</span> → <span>authorized</span> → <span>executing</span> → <span>committed</span></div><div class="state-line ambiguous"><span>executing</span> → <span>unknown</span> → <span>reconcile</span> → <span>committed</span> hoặc <span>compensated / manual resolution</span></div><p>Unknown mutation không được retry mù. Hệ thống query provider receipt hoặc reconcile thủ công. Workspace commit dùng versioning và compare-and-swap.</p></div>
+    </section>
+
+    <section id="ux">
+      <div class="section-head"><span class="eyebrow">06 · Human-in-the-loop UX</span><h2>Canonical UI tại điểm có hậu quả</h2><p>Read-only và reversible work chạy tự động; approval chỉ xuất hiện khi mở rộng quyền hoặc tạo external side effect.</p></div>
+      <div class="ux-grid">
+        <article class="ux-card"><h3>1. Plan Preview</h3><div class="wire"><div class="wire-row"><b>Mục tiêu</b><span>CSV → report.md → Project Drive</span></div><div class="wire-row"><b>Data</b><span>3 selected files</span></div><div class="wire-row"><b>Network</b><span>Public read + verified mirror</span></div><div class="wire-row"><b>Side effect</b><span>1 upload · approval required</span></div></div></article>
+        <article class="ux-card"><h3>2. Live Activity</h3><div class="wire"><div class="wire-row"><b>Browser</b><span>Untrusted provenance</span></div><div class="wire-row"><b>Code</b><span>Isolated · quota active</span></div><div class="wire-row"><b>Files</b><span>Versioned diff</span></div><div class="wire-row"><b>Controls</b><span>Pause · Stop · Revoke</span></div></div></article>
+        <article class="ux-card approval"><h3>3. Canonical Approval Sheet · system-rendered</h3><div class="wire"><h3>Upload report.md to Project Drive</h3><div class="wire-row"><b>Agent muốn làm gì?</b><span>Upload một Markdown đã scan</span></div><div class="wire-row"><b>Dữ liệu/tài nguyên?</b><span>report.md · SHA-256 8f2a…91c4</span></div><div class="wire-row"><b>Gửi đến đâu?</b><span>Project Drive / Cloud Sandbox Demo</span></div><div class="wire-row"><b>Hậu quả/blast radius?</b><span>Tạo một file trong project</span></div><div class="wire-row"><b>Có thể hoàn tác?</b><span>Có · xóa file đã upload</span></div><div class="wire-row"><b>Scope và expiry?</b><span>Exact action · 5 phút</span></div><div class="choices"><span>◉ Chỉ hành động này</span><span>○ Batch chính xác gồm 1 artifact</span></div><div class="buttons"><span class="btn danger">Stop task</span><span class="btn">Reject</span><span class="btn primary">Upload report.md to Project Drive</span></div></div></article>
+        <article class="ux-card"><h3>4. File Diff Review</h3><div class="wire"><div class="wire-row"><b>+ report.md</b><span>126 lines</span></div><div class="wire-row"><b>Base</b><span>workspace.v1</span></div><div class="wire-row"><b>Actions</b><span>Commit · Request changes · Rollback</span></div></div></article>
+        <article class="ux-card"><h3>5. External Action Preview</h3><div class="wire"><div class="wire-row"><b>Destination</b><span>Project Drive</span></div><div class="wire-row"><b>Payload</b><span>1 scanned artifact</span></div><div class="wire-row"><b>Intent</b><span>Outbox recorded</span></div></div></article>
+        <article class="ux-card"><h3>6. Artifact Review</h3><div class="wire"><div class="wire-row"><b>MIME</b><span>text/markdown</span></div><div class="wire-row"><b>Malware</b><span>Clean</span></div><div class="wire-row"><b>Manifest</b><span>Verified</span></div><div class="wire-row"><b>Policy</b><span>Promotable</span></div></div></article>
+        <article class="ux-card"><h3>7. Teardown Summary</h3><div class="wire"><div class="wire-row"><b>Persisted</b><span>Versions · receipts · audit</span></div><div class="wire-row"><b>Deleted</b><span>RAM · /tmp · downloads</span></div><div class="wire-row"><b>Revoked</b><span>Token · capability</span></div></div></article>
+      </div>
+      <div class="policy-grid"><div class="policy-box"><h3>Auto-allow</h3><p>Public read-only web trong plan; selected files; reversible workspace changes; pinned packages từ approved mirror.</p></div><div class="policy-box approve"><h3>Require approval</h3><p>New domain/package; new credential scope; upload; email/form; delete/overwrite; publish; expanded filesystem/network; payment/permission/security settings.</p></div></div>
+      <p class="muted">Giảm fatigue bằng auto-allow cho thao tác low-risk, batch theo plan + destination + data class, scope hẹp có TTL, và “deny + explain” khi policy không chắc. Không có “always allow” cho hành động rủi ro cao.</p>
+    </section>
+
+    <section id="happy">
+      <div class="section-head"><span class="eyebrow">07 · Happy Path · illustrative UX scenario</span><h2>CSV → research → report.md → Project Drive</h2><p>“Đọc các CSV đã chọn, nghiên cứu thông tin công khai còn thiếu, tạo báo cáo Markdown và upload báo cáo đã duyệt vào Project Drive.”</p></div>
+      <div class="timeline">
+        <article class="step" data-happy-step><span class="step-no">1</span><div class="step-body"><h3>Parse goal &amp; classify data/risk</h3><div class="step-meta"><div><b>System</b>Tạo constrained plan</div><div><b>Control</b>Typed plan + policy</div><div><b>User sees</b>Scope, data, domains, budget</div><div><b>State</b>plan.v1</div><div><b>Outcome</b>Plan constrained</div></div></div></article>
+        <article class="step" data-happy-step><span class="step-no">2</span><div class="step-body"><h3>Allocate &amp; attest Code + Browser microVM</h3><div class="step-meta"><div><b>System</b>Tạo hai Firecracker VM</div><div><b>Control</b>Signed image + attestation</div><div><b>User sees</b>Environment ready, quotas</div><div><b>State</b>Session metadata</div><div><b>Outcome</b>2 isolated guests</div></div></div></article>
+        <article class="step" data-happy-step><span class="step-no">3</span><div class="step-body"><h3>Import selected files read-only</h3><div class="step-meta"><div><b>System</b>Pin hash, create base version</div><div><b>Control</b>Explicit selection + RO mount</div><div><b>User sees</b>Inventory + sensitivity</div><div><b>State</b>Input manifest</div><div><b>Outcome</b>inputs.pinned</div></div></div></article>
+        <article class="step" data-happy-step><span class="step-no">4</span><div class="step-body"><h3>Research/read with untrusted provenance</h3><div class="step-meta"><div><b>System</b>Browser extracts typed data</div><div><b>Control</b>Gateway + reader/actor split</div><div><b>User sees</b>URLs + untrusted labels</div><div><b>State</b>Provenance + extraction</div><div><b>Outcome</b>Mediated data</div></div></div></article>
+        <article class="step" data-happy-step><span class="step-no">5</span><div class="step-body"><h3>Install pinned dependency</h3><div class="step-meta"><div><b>System</b>Fetch verified digest</div><div><b>Control</b>Mirror-only egress</div><div><b>User sees</b>Package + provenance</div><div><b>State</b>Dependency lock</div><div><b>Outcome</b>deps.locked</div></div></div></article>
+        <article class="step" data-happy-step><span class="step-no">6</span><div class="step-body"><h3>Build, edit, test &amp; create report.md</h3><div class="step-meta"><div><b>System</b>Write versioned workspace diff</div><div><b>Control</b>Quota + CoW branch</div><div><b>User sees</b>Logs + file diff</div><div><b>State</b>workspace.v2</div><div><b>Outcome</b>Artifact candidate</div></div></div></article>
+        <article class="step" data-happy-step><span class="step-no">7</span><div class="step-body"><h3>Quarantine, scan &amp; create manifest</h3><div class="step-meta"><div><b>System</b>Scanner Cell parses/detonates</div><div><b>Control</b>Separate quarantine boundary</div><div><b>User sees</b>Hash + findings</div><div><b>State</b>Scan result + manifest</div><div><b>Outcome</b>Promotable</div></div></div></article>
+        <article class="step" data-happy-step><span class="step-no">8</span><div class="step-body"><h3>Request access to user service</h3><div class="step-meta"><div><b>System</b>Prepare opaque handle</div><div><b>Control</b>Credential remains outside</div><div><b>User sees</b>Account/scope/expiry</div><div><b>State</b>Credential intent</div><div><b>Outcome</b>No usable token yet</div></div></div></article>
+        <article class="step" data-happy-step><span class="step-no">9</span><div class="step-body"><h3>Preview side effect &amp; obtain approval</h3><div class="step-meta"><div><b>System</b>Render canonical sheet</div><div><b>Control</b>Bind exact hash/destination/TTL</div><div><b>User sees</b>Upload/Reject/Stop</div><div><b>State</b>Signed receipt</div><div><b>Outcome</b>Authorized</div></div></div></article>
+        <article class="step" data-happy-step><span class="step-no">10</span><div class="step-body"><h3>Execute through Action Executor</h3><div class="step-meta"><div><b>System</b>Outbox → token → typed upload</div><div><b>Control</b>Idempotency + audience binding</div><div><b>User sees</b>Pending receipt</div><div><b>State</b>Intent + key</div><div><b>Outcome</b>External receipt</div></div></div></article>
+        <article class="step" data-happy-step><span class="step-no">11</span><div class="step-body"><h3>Reconcile receipt, review, audit &amp; commit</h3><div class="step-meta"><div><b>System</b>Verify provider receipt</div><div><b>Control</b>CAS + append-only audit</div><div><b>User sees</b>Receipt + diff review</div><div><b>State</b>Committed records</div><div><b>Outcome</b>Committed safely</div></div></div></article>
+        <article class="step" data-happy-step><span class="step-no">12</span><div class="step-body"><h3>Teardown, revoke, persist &amp; delete</h3><div class="step-meta"><div><b>System</b>Destroy VMs, close network</div><div><b>Control</b>Revoke token/capability</div><div><b>User sees</b>State summary</div><div><b>State</b>Allowed durable state</div><div><b>Outcome</b>Session closed</div></div></div></article>
+      </div>
+      <div class="flow-note spaced">Browser microVM → typed extraction result / download reference → Control Plane mediation → structured data hoặc scanned reference → Code microVM</div>
+      <p class="muted"><b>Upload-specific ordering:</b> Với scenario upload file, artifact scanning được đưa lên trước External Action Preview và Action Executor để bảo đảm artifact chưa scan không bao giờ rời quarantine.</p>
+    </section>
+
+    <section id="failures">
+      <div class="section-head"><span class="eyebrow">08 · Failure Cases</span><h2>12 failure mode và recovery contract</h2><p>Không case nào bị ẩn. Bốn case đại diện được nhấn mạnh.</p></div>
+      <div class="case-grid">
+        <article class="case" data-failure-case><span class="tag">Runtime</span><h3>1. Code/tool loop vô hạn</h3><dl><dt>Trigger</dt><dd>Bug hoặc injection gây loop/cost.</dd><dt>Detection</dt><dd>Watchdog, wall/tool/token budget.</dd><dt>Containment</dt><dd>Stop process tree.</dd><dt>Recovery</dt><dd>Giữ safe workspace checkpoint.</dd><dt>UX</dt><dd>Limit, partial result, request extension.</dd><dt>Owner</dt><dd>Runtime / Workflow</dd><dt>Final</dt><dd>Stopped; no external side effect.</dd></dl></article>
+        <article class="case emphasis" data-failure-case><span class="tag">Featured</span><h3>2. Sandbox crash</h3><dl><dt>Trigger</dt><dd>VMM/guest failure.</dd><dt>Detection</dt><dd>Heartbeat và health check.</dd><dt>Containment</dt><dd>Isolate failed VM.</dd><dt>Recovery</dt><dd>Clean VM + scanned workspace + safe replay.</dd><dt>UX</dt><dd>“Recovered; no external action repeated.”</dd><dt>Owner</dt><dd>Scheduler</dd><dt>Final</dt><dd>Transient state lost; durable checkpoint intact.</dd></dl></article>
+        <article class="case" data-failure-case><span class="tag">Browser</span><h3>3. Browser crash</h3><dl><dt>Trigger</dt><dd>Renderer failure/OOM.</dd><dt>Detection</dt><dd>Process isolation, tab health.</dd><dt>Containment</dt><dd>Kill failed browser guest.</dd><dt>Recovery</dt><dd>Fresh restart; approved profile only.</dd><dt>UX</dt><dd>Show last page/action.</dd><dt>Owner</dt><dd>Browser Service</dd><dt>Final</dt><dd>Workflow resumes from typed checkpoint.</dd></dl></article>
+        <article class="case emphasis" data-failure-case><span class="tag">Featured</span><h3>4. Out-of-memory</h3><dl><dt>Trigger</dt><dd>Build, archive hoặc browser pressure.</dd><dt>Detection</dt><dd>Hard limit + pressure metrics.</dd><dt>Containment</dt><dd>Kill largest child/guest.</dd><dt>Recovery</dt><dd>Cleanup hoặc higher tier với approval.</dd><dt>UX</dt><dd>Process cause + cost delta.</dd><dt>Owner</dt><dd>Runtime</dd><dt>Final</dt><dd>Checkpoint retained; RAM discarded.</dd></dl></article>
+        <article class="case" data-failure-case><span class="tag">Storage</span><h3>5. Disk hoặc inode full</h3><dl><dt>Trigger</dt><dd>Logs, archive, cache growth.</dd><dt>Detection</dt><dd>Quota + archive preflight.</dd><dt>Containment</dt><dd>Stop writes; protect workspace.</dd><dt>Recovery</dt><dd>Delete temp/cache, retain delta.</dd><dt>UX</dt><dd>Storage breakdown + cleanup choice.</dd><dt>Owner</dt><dd>Runtime / Artifact</dd><dt>Final</dt><dd>Workspace safe; temp removed.</dd></dl></article>
+        <article class="case emphasis" data-failure-case><span class="tag">Featured</span><h3>6. Network timeout</h3><dl><dt>Trigger</dt><dd>Upstream/proxy timeout.</dd><dt>Detection</dt><dd>Deadline, retry classification.</dd><dt>Containment</dt><dd>Stop blind mutation retry.</dd><dt>Recovery</dt><dd>Query provider receipt; reconcile.</dd><dt>UX</dt><dd>executing → unknown → reconcile.</dd><dt>Owner</dt><dd>Gateway / Workflow</dd><dt>Final</dt><dd>Committed, compensated hoặc manual; never “exactly once”.</dd></dl></article>
+        <article class="case" data-failure-case><span class="tag">Supply chain</span><h3>7. Registry compromise/outage</h3><dl><dt>Trigger</dt><dd>Malicious/unavailable package source.</dd><dt>Detection</dt><dd>Digest/signature/provenance mismatch.</dd><dt>Containment</dt><dd>Fail closed.</dd><dt>Recovery</dt><dd>Use verified cache or stop.</dd><dt>UX</dt><dd>Blocked dependency + reason.</dd><dt>Owner</dt><dd>Supply Chain</dd><dt>Final</dt><dd>Unverified code never executes.</dd></dl></article>
+        <article class="case" data-failure-case><span class="tag">Policy</span><h3>8. Policy không phân loại được risk</h3><dl><dt>Trigger</dt><dd>Novel/ambiguous action.</dd><dt>Detection</dt><dd>Typed schema lacks safe verdict.</dd><dt>Containment</dt><dd>Fail closed.</dd><dt>Recovery</dt><dd>Human/security review hoặc deny.</dd><dt>UX</dt><dd>“Không thể phân loại; chưa chạy.”</dd><dt>Owner</dt><dd>Policy</dd><dt>Final</dt><dd>No action, no credential issued.</dd></dl></article>
+        <article class="case" data-failure-case><span class="tag">Approval</span><h3>9. Approval hết hạn/bị từ chối</h3><dl><dt>Trigger</dt><dd>TTL hoặc user decision.</dd><dt>Detection</dt><dd>Signed receipt validation.</dd><dt>Containment</dt><dd>Discard grant.</dd><dt>Recovery</dt><dd>Re-plan và xin exact approval mới.</dd><dt>UX</dt><dd>Explicit “no side effect”.</dd><dt>Owner</dt><dd>Approval Service</dd><dt>Final</dt><dd>Credential absent/revoked.</dd></dl></article>
+        <article class="case" data-failure-case><span class="tag">Session</span><h3>10. User đóng phiên giữa chừng</h3><dl><dt>Trigger</dt><dd>Disconnect/close.</dd><dt>Detection</dt><dd>Lease expiration.</dd><dt>Containment</dt><dd>Suspend, revoke, teardown TTL.</dd><dt>Recovery</dt><dd>Resume from durable checkpoint.</dd><dt>UX</dt><dd>Resume card + retained/deleted state.</dd><dt>Owner</dt><dd>Workflow</dd><dt>Final</dt><dd>Live capability revoked.</dd></dl></article>
+        <article class="case emphasis" data-failure-case><span class="tag">Featured</span><h3>11. Poisoned snapshot/workspace</h3><dl><dt>Trigger</dt><dd>Malware/injected persistent state.</dd><dt>Detection</dt><dd>Lineage, scan, attestation.</dd><dt>Containment</dt><dd>Quarantine/discard snapshot.</dd><dt>Recovery</dt><dd>Clean base + file-level cherry-pick.</dd><dt>UX</dt><dd>Warning + excluded-file diff.</dd><dt>Owner</dt><dd>State / IR</dd><dt>Final</dt><dd>Unscanned snapshot never resumes.</dd></dl></article>
+        <article class="case" data-failure-case><span class="tag">Outbox</span><h3>12. Duplicate side effect after retry</h3><dl><dt>Trigger</dt><dd>Crash/ambiguous response.</dd><dt>Detection</dt><dd>Outbox key + remote receipt.</dd><dt>Containment</dt><dd>Same key; no blind retry.</dd><dt>Recovery</dt><dd>Query, compensate hoặc manual.</dd><dt>UX</dt><dd>“Outcome unknown—checking.”</dd><dt>Owner</dt><dd>Action Executor / Outbox</dd><dt>Final</dt><dd>One reconciled outcome; no exactly-once claim.</dd></dl></article>
+      </div>
+    </section>
+
+    <section id="abuse">
+      <div class="section-head"><span class="eyebrow">09 · Abuse Cases</span><h2>16 adversarial paths, visible end-to-end</h2><p>Prevention không phụ thuộc classifier duy nhất; containment, audit và user explanation là một phần của design.</p></div>
+      <div class="static-flow">Prompt injection: Untrusted website → provenance label → Reader extracts data → malicious instruction attempts action → Reader/Actor boundary rejects authority transfer → Policy mismatch → Credential Broker refuses → Gateway blocks destination → audit → user warning</div>
+      <div class="static-flow">Approval spoof: Fake approval content → marked untrusted → canonical Approval UI stays separate → action mismatch → no signed receipt → Action Executor refuses → no side effect</div>
+      <div class="case-grid">
+        <article class="case threat" data-abuse-case><h3>1. Fork bomb</h3><dl><dt>Entry</dt><dd>Shell/package hook.</dd><dt>Impact</dt><dd>Compute DoS.</dd><dt>Prevention</dt><dd>PID/cgroup, no privilege.</dd><dt>Detection</dt><dd>PID growth.</dd><dt>Recovery</dt><dd>Kill tree.</dd><dt>UX</dt><dd>Quota violation explained.</dd><dt>Owner</dt><dd>Runtime</dd><dt>Outcome</dt><dd>Contained.</dd></dl></article>
+        <article class="case threat" data-abuse-case><h3>2. Crypto mining</h3><dl><dt>Entry</dt><dd>Binary/script.</dd><dt>Impact</dt><dd>Cost abuse.</dd><dt>Prevention</dt><dd>CPU/time/egress caps.</dd><dt>Detection</dt><dd>Sustained CPU/pool protocol.</dd><dt>Recovery</dt><dd>Terminate; preserve audit.</dd><dt>UX</dt><dd>Session stopped.</dd><dt>Owner</dt><dd>Abuse/Runtime</dd><dt>Outcome</dt><dd>Account review.</dd></dl></article>
+        <article class="case threat" data-abuse-case><h3>3. Zip bomb</h3><dl><dt>Entry</dt><dd>Upload/download archive.</dd><dt>Impact</dt><dd>Disk/CPU exhaustion.</dd><dt>Prevention</dt><dd>Size/ratio/depth/inode limits.</dd><dt>Detection</dt><dd>Expansion telemetry.</dd><dt>Recovery</dt><dd>Quarantine/delete temp.</dd><dt>UX</dt><dd>File blocked.</dd><dt>Owner</dt><dd>Artifact</dd><dt>Outcome</dt><dd>No extraction.</dd></dl></article>
+        <article class="case threat" data-abuse-case><h3>4. Malware/ransomware</h3><dl><dt>Entry</dt><dd>Code/package/file.</dd><dt>Impact</dt><dd>Corruption/persistence.</dd><dt>Prevention</dt><dd>MicroVM, RO input, versions.</dd><dt>Detection</dt><dd>YARA/behavior/entropy.</dd><dt>Recovery</dt><dd>Kill, rollback, quarantine.</dd><dt>UX</dt><dd>Finding + restored version.</dd><dt>Owner</dt><dd>IR/State</dd><dt>Outcome</dt><dd>Artifact not exported.</dd></dl></article>
+        <article class="case threat emphasis" data-abuse-case><span class="tag">Featured</span><h3>5. Website/email/document prompt injection</h3><dl><dt>Entry</dt><dd>DOM/image/email/PDF.</dd><dt>Impact</dt><dd>Goal hijack/exfiltration.</dd><dt>Prevention</dt><dd>Provenance + reader/actor split.</dd><dt>Detection</dt><dd>Intent/action mismatch.</dd><dt>Recovery</dt><dd>Stop action; discard poisoned state.</dd><dt>UX</dt><dd>Highlight malicious source.</dd><dt>Owner</dt><dd>Agent Security</dd><dt>Outcome</dt><dd>Authority transfer rejected.</dd></dl></article>
+        <article class="case threat emphasis" data-abuse-case><span class="tag">Featured</span><h3>6. Data exfiltration</h3><dl><dt>Entry</dt><dd>POST/DNS/form/upload.</dd><dt>Impact</dt><dd>Data loss.</dd><dt>Prevention</dt><dd>Default deny + DLP + approval.</dd><dt>Detection</dt><dd>Proxy/DNS anomaly/canary.</dd><dt>Recovery</dt><dd>Block, revoke, incident.</dd><dt>UX</dt><dd>Destination/data reason shown.</dd><dt>Owner</dt><dd>Gateway</dd><dt>Outcome</dt><dd>Unauthorized transfer blocked.</dd></dl></article>
+        <article class="case threat emphasis" data-abuse-case><span class="tag">Featured</span><h3>7. SSRF / DNS rebinding</h3><dl><dt>Entry</dt><dd>URL/redirect/DNS.</dd><dt>Impact</dt><dd>Metadata/private access.</dd><dt>Prevention</dt><dd>No route; validate every hop.</dd><dt>Detection</dt><dd>Denied special IP.</dd><dt>Recovery</dt><dd>Kill; rotate workload identity.</dd><dt>UX</dt><dd>Unsafe destination explained.</dd><dt>Owner</dt><dd>Gateway</dd><dt>Outcome</dt><dd>Request blocked.</dd></dl></article>
+        <article class="case threat emphasis" data-abuse-case><span class="tag">Featured</span><h3>8. Credential theft</h3><dl><dt>Entry</dt><dd>Env/proc/log/screenshot.</dd><dt>Impact</dt><dd>Account takeover.</dd><dt>Prevention</dt><dd>Secret outside; proxy injection.</dd><dt>Detection</dt><dd>Canary/anomalous use.</dd><dt>Recovery</dt><dd>Revoke/rotate.</dd><dt>UX</dt><dd>Affected account notice.</dd><dt>Owner</dt><dd>Credential Broker</dd><dt>Outcome</dt><dd>Token invalidated.</dd></dl></article>
+        <article class="case threat" data-abuse-case><h3>9. Cross-tenant access</h3><dl><dt>Entry</dt><dd>IDOR/cache/volume/escape.</dd><dt>Impact</dt><dd>Tenant breach.</dd><dt>Prevention</dt><dd>Tenant authz/KMS/microVM.</dd><dt>Detection</dt><dd>Canary/access graph.</dd><dt>Recovery</dt><dd>Isolate cell, rotate identity.</dd><dt>UX</dt><dd>Incident notification policy.</dd><dt>Owner</dt><dd>Platform/IR</dd><dt>Outcome</dt><dd>Cell quarantined.</dd></dl></article>
+        <article class="case threat" data-abuse-case><h3>10. Agent gửi nhầm email/form</h3><dl><dt>Entry</dt><dd>Bad plan/injection.</dd><dt>Impact</dt><dd>Wrong recipient/payload.</dd><dt>Prevention</dt><dd>Canonical exact preview.</dd><dt>Detection</dt><dd>Recipient anomaly.</dd><dt>Recovery</dt><dd>Cancel/recall if supported.</dd><dt>UX</dt><dd>Exact recipient visible.</dd><dt>Owner</dt><dd>Action Executor/UX</dd><dt>Outcome</dt><dd>Mismatch blocked or compensated.</dd></dl></article>
+        <article class="case threat" data-abuse-case><h3>11. Upload nhầm file riêng tư</h3><dl><dt>Entry</dt><dd>Broad glob/poisoned DOM.</dd><dt>Impact</dt><dd>Privacy breach.</dd><dt>Prevention</dt><dd>Explicit manifest + DLP.</dd><dt>Detection</dt><dd>Label/scope mismatch.</dd><dt>Recovery</dt><dd>Block or revoke link/token.</dd><dt>UX</dt><dd>Exact file/hash shown.</dd><dt>Owner</dt><dd>Artifact/Policy</dd><dt>Outcome</dt><dd>Wrong file not uploaded.</dd></dl></article>
+        <article class="case threat" data-abuse-case><h3>12. Xóa/ghi đè file</h3><dl><dt>Entry</dt><dd>Ambiguous command.</dd><dt>Impact</dt><dd>Data loss.</dd><dt>Prevention</dt><dd>Version/CAS/trash + approval.</dd><dt>Detection</dt><dd>Destructive diff.</dd><dt>Recovery</dt><dd>Undo/restore.</dd><dt>UX</dt><dd>Exact paths + rollback.</dd><dt>Owner</dt><dd>Filesystem</dd><dt>Outcome</dt><dd>Recoverable change.</dd></dl></article>
+        <article class="case threat" data-abuse-case><h3>13. Artifact chứa malware</h3><dl><dt>Entry</dt><dd>Generated/downloaded file.</dd><dt>Impact</dt><dd>Harm after export.</dd><dt>Prevention</dt><dd>Quarantine/detonation/CDR.</dd><dt>Detection</dt><dd>Scanner + behavior.</dd><dt>Recovery</dt><dd>Block export/regenerate.</dd><dt>UX</dt><dd>Finding + provenance.</dd><dt>Owner</dt><dd>Artifact</dd><dt>Outcome</dt><dd>Remains quarantined.</dd></dl></article>
+        <article class="case threat" data-abuse-case><h3>14. User yêu cầu malware/phishing</h3><dl><dt>Entry</dt><dd>Prompt/upload.</dd><dt>Impact</dt><dd>Abuse/victim harm.</dd><dt>Prevention</dt><dd>Use policy + constrained capability.</dd><dt>Detection</dt><dd>Abuse classifier/rate.</dd><dt>Recovery</dt><dd>Refuse/escalate.</dd><dt>UX</dt><dd>Clear refusal.</dd><dt>Owner</dt><dd>Trust &amp; Safety</dd><dt>Outcome</dt><dd>No harmful artifact/action.</dd></dl></article>
+        <article class="case threat" data-abuse-case><h3>15. Agent vượt thời gian/ngân sách</h3><dl><dt>Entry</dt><dd>Loop/intent abuse.</dd><dt>Impact</dt><dd>Cost/availability.</dd><dt>Prevention</dt><dd>Hard budget/circuit breaker.</dd><dt>Detection</dt><dd>Usage meter.</dd><dt>Recovery</dt><dd>Stop, retain partial result.</dd><dt>UX</dt><dd>Specific extension request.</dd><dt>Owner</dt><dd>Workflow</dd><dt>Outcome</dt><dd>Bounded cost.</dd></dl></article>
+        <article class="case threat emphasis" data-abuse-case><span class="tag">Featured</span><h3>16. Approval spoof / Lies-in-the-loop</h3><dl><dt>Entry</dt><dd>Injected fake dialog/content.</dd><dt>Impact</dt><dd>False consent.</dd><dt>Prevention</dt><dd>System-rendered canonical UI.</dd><dt>Detection</dt><dd>Receipt/action mismatch.</dd><dt>Recovery</dt><dd>Reject + security banner.</dd><dt>UX</dt><dd>Untrusted content visually separate.</dd><dt>Owner</dt><dd>Approval UI</dd><dt>Outcome</dt><dd>No signed receipt; no side effect.</dd></dl></article>
+      </div>
+    </section>
+
+    <section id="production">
+      <div class="section-head"><span class="eyebrow">10 · MVP versus Production</span><h2>Giữ nguyên boundary, thay runtime theo maturity</h2></div>
+      <div class="table-wrap"><table class="compare"><thead><tr><th>Capability</th><th>MVP</th><th>Production target</th></tr></thead><tbody>
+        <tr><td>Isolation</td><td>Dedicated Kubernetes nodes, gVisor RuntimeClass, separate Code/Browser pods</td><td>Dual Firecracker microVM; separate Code, Browser và Quarantine cells</td></tr>
+        <tr><td>Startup/scheduling</td><td>Dedicated node pool</td><td>Clean warm snapshots + risk-aware scheduler</td></tr>
+        <tr><td>Network</td><td>HTTPS allowlist proxy; no private network</td><td>eBPF + L7/DNS/DLP egress, per-hop enforcement</td></tr>
+        <tr><td>State</td><td>PostgreSQL workflow/outbox; object-store versions</td><td>Durable event-sourced workflow; provider idempotent adapters</td></tr>
+        <tr><td>Credentials</td><td>Limited OAuth connectors</td><td>Token exchange, downscope, audience binding, tenant KMS</td></tr>
+        <tr><td>Approval</td><td>Manual send/upload/delete/new-domain approval</td><td>Risk-based canonical approval with exact signed receipt</td></tr>
+        <tr><td>Artifacts</td><td>Basic MIME/archive/AV/YARA scan</td><td>Multi-stage quarantine, detonation, CDR, provenance</td></tr>
+        <tr><td>Operations</td><td>Low/medium-risk beta</td><td>WORM audit, SIEM/SOAR, residency, multi-cell IR</td></tr>
+      </tbody></table></div>
+      <p><b>Production là kiến trúc đích.</b> MVP giữ nguyên trust boundaries và typed broker interfaces để có thể thay runtime mà không thiết kế lại security model hoặc UX.</p>
+    </section>
+
+    <section id="invariants">
+      <div class="section-head"><span class="eyebrow">11 · Security Invariants</span><h2>Mười điều hệ thống không được vi phạm</h2></div>
+      <div class="invariant-grid">
+        <div class="invariant">Long-lived plaintext credential không vào sandbox, model context, logs, screenshots hoặc snapshots.</div>
+        <div class="invariant">Sandbox không có route tới control plane, metadata hoặc private network mặc định.</div>
+        <div class="invariant">Không egress path nào bypass gateway và DNS policy.</div>
+        <div class="invariant">External side effect cần typed action, policy verdict và approval receipt khi áp dụng.</div>
+        <div class="invariant">Approval bind exact destination, data, action và expiry.</div>
+        <div class="invariant">Unknown external mutation không bao giờ được retry mù.</div>
+        <div class="invariant">Post-user snapshot không được reuse cross-tenant; unscanned snapshot không resume.</div>
+        <div class="invariant">Unscanned artifact không bao giờ rời quarantine.</div>
+        <div class="invariant">Control Plane không parse hoặc execute untrusted artifact với privilege.</div>
+        <div class="invariant">Pause, stop và credential revoke phải có hiệu lực nhanh và được audit.</div>
+      </div>
+    </section>
+
+    <section id="sources">
+      <div class="section-head"><span class="eyebrow">12 · Sources &amp; Documents</span><h2>Nguồn sự thật và quy ước bằng chứng</h2><p><b>Ngày thiết kế:</b> 30/07/2026. <b>Production recommendation:</b> dual Firecracker microVM + controlled egress + Credential Broker + typed Action Executor + Transactional Outbox + separate quarantine.</p></div>
+      <div class="sources">
+        <article class="source-card">
+          <a class="source-link" href="./document.html?doc=deliverable">Xem Architecture &amp; UX deliverable →</a>
+        </article>
+        <article class="source-card">
+          <a class="source-link" href="./document.html?doc=research">Xem nghiên cứu kiến trúc đầy đủ →</a>
+        </article>
+      </div>
+      <p><b>Fact</b> là điều nguồn công bố trực tiếp. <b>Inference</b> là suy luận có giới hạn từ nhiều nguồn. <b>Recommendation</b> là quyết định thiết kế của báo cáo; không được trình bày như kiến trúc vendor chưa công bố.</p>
+      <h3>Nguồn nghiên cứu trọng yếu đã có trong tài liệu chi tiết</h3>
+      <ul><li>Firecracker Design và Agache et al., NSDI 2020.</li><li>Kubernetes Security Checklist; gVisor Security/Performance.</li><li>Chromium Site Isolation.</li><li>OWASP LLM01/LLM06 và USENIX Security 2024 về prompt injection.</li><li>RFC 8693 Token Exchange và RFC 8707 Resource Indicators.</li><li>AWS Well-Architected Idempotency; SLSA v1.2 và Sigstore.</li><li>SOUPS 2019 về warning fatigue; NIST AI RMF GenAI Profile.</li></ul>
+    </section>
+  </main>
+  <footer>Cloud Agent Sandbox · Static architecture report · GitHub Pages ready</footer>
+</body>
+</html>
